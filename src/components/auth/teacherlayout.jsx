@@ -1,0 +1,123 @@
+import { Outlet, Link, useParams, useNavigate } from "react-router-dom"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { useState, useEffect } from "react"
+import {
+  MenuIcon,
+  XIcon,
+  LayoutDashboardIcon,
+  BookOpenIcon,
+  ClipboardCheckIcon,
+  LogOutIcon,
+  SchoolIcon,
+} from "lucide-react"
+import { toast } from "sonner"
+
+const navItems = [
+  { icon: LayoutDashboardIcon, label: "Dashboard", href: "" },
+  { icon: BookOpenIcon, label: "My Classes", href: "/classes" },
+  { icon: ClipboardCheckIcon, label: "Results", href: "/results" },
+]
+
+export default function TeacherLayout() {
+  const { slug } = useParams()
+  const navigate = useNavigate()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [schoolName, setSchoolName] = useState(slug)
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("school_auth")
+      if (raw) {
+        const auth = JSON.parse(raw)
+        setSchoolName(auth?.user?.schoolName || auth?.user?.subDomain || slug)
+      }
+    } catch {
+      // ignore
+    }
+  }, [slug])
+
+  function handleLogout() {
+    localStorage.removeItem("school_auth")
+    toast.success("Logged out successfully")
+    navigate(`/auth/school/${slug}/login`)
+  }
+
+  return (
+    <div className="flex h-svh">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`
+          fixed inset-y-0 left-0 z-50 w-64 transform border-r border-border bg-background transition-transform duration-200 ease-in-out lg:static lg:translate-x-0
+          ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        <div className="flex h-full flex-col">
+          <div className="flex items-center justify-between border-b border-border px-4 py-4">
+            <div className="flex items-center gap-2">
+              <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <SchoolIcon className="size-4" />
+              </div>
+              <span className="max-w-[10rem] truncate font-semibold tracking-tight">
+                {schoolName}
+              </span>
+            </div>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
+            >
+              <XIcon className="size-4" />
+            </button>
+          </div>
+
+          <nav className="flex-1 space-y-1 overflow-y-auto p-3">
+            {navItems.map((item) => (
+              <Link
+                key={item.label}
+                to={`/${slug}/teacher${item.href}`}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              >
+                <item.icon className="size-4" />
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="border-t border-border p-3 space-y-1">
+            <button
+              onClick={handleLogout}
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <LogOutIcon className="size-4" />
+              Logout
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <header className="flex items-center justify-between border-b border-border px-4 py-3 lg:px-6">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
+          >
+            <MenuIcon className="size-5" />
+          </button>
+          <span className="text-sm font-semibold tracking-tight text-brand">Inspire</span>
+          <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle />
+          </div>
+        </header>
+
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  )
+}
