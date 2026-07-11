@@ -56,6 +56,13 @@ const portals = [
     href: "/auth/school/find",
     variant: "outline",
   },
+  {
+    icon: ShieldCheckIcon,
+    title: "Super Admin",
+    description: "Platform administration access",
+    href: "/auth/superadmin/login",
+    variant: "outline",
+  },
 ]
 
 export default function HomePage() {
