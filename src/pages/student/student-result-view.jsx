@@ -83,11 +83,19 @@ export default function StudentResultView() {
     function handlePrint() {
         const previousTheme = theme
         setTheme('light')
-        window.onafterprint = () => {
-            setTheme(previousTheme)
-            window.onafterprint = null
+        const doPrint = () => {
+            window.onafterprint = () => {
+                setTheme(previousTheme)
+                window.onafterprint = null
+            }
+            window.print()
         }
-        window.print()
+        const nextFrame = () => requestAnimationFrame(() => requestAnimationFrame(doPrint))
+        if (document.fonts?.ready) {
+            document.fonts.ready.then(nextFrame).catch(nextFrame)
+        } else {
+            nextFrame()
+        }
     }
 
     return (
@@ -126,6 +134,12 @@ export default function StudentResultView() {
                         min-height: 0 !important;
                         max-height: none !important;
                         overflow: visible !important;
+                        color-scheme: light !important;
+                        background: #ffffff !important;
+                    }
+
+                    html {
+                        background: #ffffff !important;
                     }
 
                     main {
@@ -147,9 +161,16 @@ export default function StudentResultView() {
                         display: none !important;
                     }
 
-                    .result-print-root .card,
-                    .result-print-root > div {
-                        break-inside: auto;
+                    .result-print-root .card {
+                        overflow: visible !important;
+                        break-inside: avoid;
+                        box-shadow: none !important;
+                        border-color: #e5e7eb !important;
+                    }
+
+                    * {
+                        box-shadow: none !important;
+                        text-shadow: none !important;
                     }
 
                     table {
