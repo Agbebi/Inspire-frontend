@@ -29,8 +29,7 @@ export default function Teachers() {
     const [modalOpen, setModalOpen] = useState(false)
     const [editingId, setEditingId] = useState(null)
     const [formData, setFormData] = useState({ ...emptyForm })
-    const [selClasses, setSelClasses] = useState([])
-    const [selSubjects, setSelSubjects] = useState([])
+    const [assignments, setAssignments] = useState([])
 
     const [viewOpen, setViewOpen] = useState(false)
     const [viewTeacher, setViewTeacher] = useState(null)
@@ -48,8 +47,7 @@ export default function Teachers() {
             setModalOpen(false)
             setEditingId(null)
             setFormData({ ...emptyForm })
-            setSelClasses([])
-            setSelSubjects([])
+            setAssignments([])
             dispatch(resetTeacherSuccess())
         }
     }, [error, success, dispatch, editingId])
@@ -57,17 +55,14 @@ export default function Teachers() {
     function openAdd() {
         setEditingId(null)
         setFormData({ ...emptyForm })
-        setSelClasses([])
-        setSelSubjects([])
+        setAssignments([])
         setModalOpen(true)
     }
 
     function openEdit(teacher) {
         setEditingId(teacher._id)
         setFormData({ name: teacher.name || "", email: teacher.email || "", password: "" })
-        const assigned = teacher.assignedSubjects || []
-        setSelClasses([...new Set(assigned.map((a) => a.classId))])
-        setSelSubjects([...new Set(assigned.map((a) => a.subjectId))])
+        setAssignments((teacher.assignedSubjects || []).map((a) => ({ classId: a.classId, subjectId: a.subjectId })))
         setModalOpen(true)
     }
 
@@ -82,12 +77,27 @@ export default function Teachers() {
         }
     }
 
+    function addAssignmentRow() {
+        setAssignments((p) => [...p, { classId: "", subjectId: "" }])
+    }
+
+    function updateAssignmentRow(index, field, value) {
+        setAssignments((p) => p.map((a, i) => (i === index ? { ...a, [field]: value } : a)))
+    }
+
+    function removeAssignmentRow(index) {
+        setAssignments((p) => p.filter((_, i) => i !== index))
+    }
+
     function buildAssignedSubjects() {
+        const seen = new Set()
         const result = []
-        selClasses.forEach((classId) => {
-            selSubjects.forEach((subjectId) => {
-                result.push({ classId, subjectId })
-            })
+        assignments.forEach((a) => {
+            if (!a.classId || !a.subjectId) return
+            const key = `${a.classId}-${a.subjectId}`
+            if (seen.has(key)) return
+            seen.add(key)
+            result.push({ classId: a.classId, subjectId: a.subjectId })
         })
         return result
     }
@@ -173,11 +183,11 @@ export default function Teachers() {
 
             <Modal
                 open={modalOpen}
-                onClose={() => { setModalOpen(false); setEditingId(null); setFormData({ ...emptyForm }); setSelClasses([]); setSelSubjects([]) }}
+                onClose={() => { setModalOpen(false); setEditingId(null); setFormData({ ...emptyForm }); setAssignments([]) }}
                 title={editingId ? "Edit Teacher" : "Add Teacher"}
                 footer={
                     <>
-                        <Button type="button" variant="outline" onClick={() => { setModalOpen(false); setEditingId(null); setFormData({ ...emptyForm }); setSelClasses([]); setSelSubjects([]) }}>
+                        <Button type="button" variant="outline" onClick={() => { setModalOpen(false); setEditingId(null); setFormData({ ...emptyForm }); setAssignments([]) }}>
                             Cancel
                         </Button>
                         <Button type="submit" form="teacher-form" disabled={loading}>
@@ -206,24 +216,44 @@ export default function Teachers() {
                             <p className="text-xs text-muted-foreground">Add at least one class and one subject first.</p>
                         ) : (
                             <div className="space-y-3">
-                                <div className="grid grid-cols-2 gap-2">
-                                    {classes.map((c) => (
-                                        <label key={c._id} className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm">
-                                            <input type="checkbox" checked={selClasses.includes(c._id)} onChange={() => setSelClasses((p) => p.includes(c._id) ? p.filter((x) => x !== c._id) : [...p, c._id])} className="size-4" />
-                                             {c.name}{c.arm ? ` ${c.arm}` : ""}
-                                        </label>
-                                    ))}
-                                </div>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {subjects.map((s) => (
-                                        <label key={s._id} className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm">
-                                            <input type="checkbox" checked={selSubjects.includes(s._id)} onChange={() => setSelSubjects((p) => p.includes(s._id) ? p.filter((x) => x !== s._id) : [...p, s._id])} className="size-4" />
-                                            {s.name}
-                                        </label>
-                                    ))}
-                                </div>
+                                {assignments.length === 0 ? (
+                                    <p className="text-xs text-muted-foreground">No assignments yet. Add a class &amp; subject pair below.</p>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {assignments.map((a, index) => (
+                                            <div key={index} className="flex items-center gap-2">
+                                                <select
+                                                    value={a.classId}
+                                                    onChange={(e) => updateAssignmentRow(index, "classId", e.target.value)}
+                                                    className="h-9 flex-1 rounded-lg border border-border bg-background px-2 text-sm"
+                                                >
+                                                    <option value="">Select class</option>
+                                                    {classes.map((c) => (
+                                                        <option key={c._id} value={c._id}>{c.name}{c.arm ? ` ${c.arm}` : ""}</option>
+                                                    ))}
+                                                </select>
+                                                <select
+                                                    value={a.subjectId}
+                                                    onChange={(e) => updateAssignmentRow(index, "subjectId", e.target.value)}
+                                                    className="h-9 flex-1 rounded-lg border border-border bg-background px-2 text-sm"
+                                                >
+                                                    <option value="">Select subject</option>
+                                                    {subjects.map((s) => (
+                                                        <option key={s._id} value={s._id}>{s.name}</option>
+                                                    ))}
+                                                </select>
+                                                <Button type="button" variant="ghost" size="icon-sm" onClick={() => removeAssignmentRow(index)} aria-label="Remove assignment">
+                                                    <TrashIcon className="size-4" />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                <Button type="button" variant="outline" size="sm" onClick={addAssignmentRow} className="gap-2">
+                                    <PlusIcon className="size-4" /> Add class &amp; subject
+                                </Button>
                                 <p className="text-xs text-muted-foreground">
-                                    Every selected class will be paired with every selected subject (e.g. Physics + SS2).
+                                    Pair each subject with the specific class it is taught in (e.g. JSS1A + Home Economics, JSS1B + English).
                                 </p>
                             </div>
                         )}

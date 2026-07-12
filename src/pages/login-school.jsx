@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { toast } from "sonner"
-import { EyeIcon, EyeOffIcon, MailIcon, LockIcon, Loader2Icon, SchoolIcon } from "lucide-react"
+import { EyeIcon, EyeOffIcon, MailIcon, LockIcon, Loader2Icon, SchoolIcon, GraduationCapIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -172,10 +172,20 @@ export default function LoginSchool() {
         </Button>
       </form>
 
+      <div className="text-center">
+        <Link
+          to={slug ? `/${slug}/student/login` : "/auth/school/find"}
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
+        >
+          <GraduationCapIcon className="size-4" />
+          Student? Check your results here
+        </Link>
+      </div>
+
       <div className="text-center text-xs text-muted-foreground">
         <Link
           to="/auth/school/find"
-          className="font-medium text-primary underline-offset-4 hover:underline"
+          className="font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
         >
           Back to school search
         </Link>

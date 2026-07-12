@@ -1,6 +1,6 @@
 import { useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { GraduationCapIcon } from "lucide-react"
+import { useNavigate, useParams, Link } from "react-router-dom"
+import { GraduationCapIcon, HomeIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -50,7 +50,14 @@ export default function StudentLogin() {
 
     return (
         <div className="flex min-h-svh flex-col items-center justify-center p-4">
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4 flex items-center gap-2">
+                <Link
+                    to="/"
+                    aria-label="Back to home"
+                    className="rounded-md border border-primary/20 bg-primary/5 p-1.5 text-primary transition-colors hover:bg-primary/10"
+                >
+                    <HomeIcon className="size-4" />
+                </Link>
                 <ThemeToggle />
             </div>
             <div className="w-full max-w-sm space-y-6">
