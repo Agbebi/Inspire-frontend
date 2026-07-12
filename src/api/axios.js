@@ -8,7 +8,7 @@ const API = axios.create({
     headers : {
         'Content-Type' : 'application/json',
     },
-})
+}) 
 
 // Remove default Content-Type for FormData requests
 API.interceptors.request.use((config) => {

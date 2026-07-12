@@ -91,7 +91,7 @@ export default function StudentResultView() {
     }
 
     return (
-        <div className="min-h-svh overflow-auto bg-muted/30 p-4 lg:p-8">
+        <div className="result-print-root min-h-svh overflow-auto bg-muted/30 p-4 lg:p-8">
             <style>{`
                 @media print {
                     :root {
@@ -119,6 +119,56 @@ export default function StudentResultView() {
                     body {
                         background: #ffffff !important;
                         color: #000000 !important;
+                    }
+
+                    html, body, #root, main {
+                        height: auto !important;
+                        min-height: 0 !important;
+                        max-height: none !important;
+                        overflow: visible !important;
+                    }
+
+                    main {
+                        display: block !important;
+                        padding: 0 !important;
+                    }
+
+                    .result-print-root {
+                        overflow: visible !important;
+                        height: auto !important;
+                        min-height: 0 !important;
+                        background: #ffffff !important;
+                        padding: 0 !important;
+                    }
+
+                    .overflow-x-auto {
+                        overflow: visible !important;
+                    }
+
+                    .absolute {
+                        position: static !important;
+                    }
+
+                    .result-print-root .card,
+                    .result-print-root > div {
+                        break-inside: auto;
+                    }
+
+                    table {
+                        break-inside: auto;
+                    }
+
+                    thead {
+                        display: table-header-group;
+                    }
+
+                    tr {
+                        break-inside: avoid;
+                    }
+
+                    * {
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
                     }
                 }
             `}</style>
