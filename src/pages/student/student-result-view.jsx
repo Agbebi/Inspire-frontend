@@ -130,7 +130,6 @@ export default function StudentResultView() {
 
                     main {
                         display: block !important;
-                        padding: 0 !important;
                     }
 
                     .result-print-root {
@@ -138,15 +137,14 @@ export default function StudentResultView() {
                         height: auto !important;
                         min-height: 0 !important;
                         background: #ffffff !important;
-                        padding: 0 !important;
                     }
 
                     .overflow-x-auto {
                         overflow: visible !important;
                     }
 
-                    .absolute {
-                        position: static !important;
+                    .no-print {
+                        display: none !important;
                     }
 
                     .result-print-root .card,
@@ -172,11 +170,11 @@ export default function StudentResultView() {
                     }
                 }
             `}</style>
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4 no-print">
                 <ThemeToggle />
             </div>
             <div className="mx-auto max-w-3xl space-y-6">
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between no-print">
                     <Button
                         variant="ghost"
                         size="sm"
