@@ -12,6 +12,8 @@ const emptyForm = {
   adminName: "",
   adminEmail: "",
   adminPassword: "",
+  session: "",
+  term: "",
 }
 
 export default function SchoolFormModal({ open, onClose, editingId, initialData, onSubmit, loading }) {
@@ -144,6 +146,36 @@ export default function SchoolFormModal({ open, onClose, editingId, initialData,
               </p>
             </div>
           )}
+
+          <div className="space-y-3 rounded-lg border border-border bg-muted/30 p-4">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              First Academic Cycle
+            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="session">Session</Label>
+                <Input
+                  id="session"
+                  placeholder="e.g. 2025/2026"
+                  value={formData.session}
+                  onChange={(e) => updateField("session", e.target.value)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="term">Term</Label>
+                <Input
+                  id="term"
+                  placeholder="e.g. First Term"
+                  value={formData.term}
+                  onChange={(e) => updateField("term", e.target.value)}
+                />
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Optional. Seeds the school's current session/term; the school admin can add more later.
+            </p>
+          </div>
 
           <div className="flex items-center justify-end gap-3 pt-2">
             <Button type="button" variant="outline" onClick={onClose}>

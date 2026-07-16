@@ -3,9 +3,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchStudents = createAsyncThunk(
     'student/fetchStudents',
-    async (q, { rejectWithValue }) => {
+    async (params, { rejectWithValue }) => {
         try {
-            const response = await API.get('/api/school/manage/students', { params: q ? { q } : {} });
+            const query = {}
+            if (params) {
+                if (params.q) query.q = params.q
+                if (params.classId) query.classId = params.classId
+            }
+            const response = await API.get('/api/school/manage/students', { params: query });
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to load students');
@@ -49,7 +54,33 @@ export const deleteStudent = createAsyncThunk(
     }
 );
 
-const initialState = { items: [], loading: false, error: null, success: false };
+export const promoteStudents = createAsyncThunk(
+    'student/promoteStudents',
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await API.post('/api/school/manage/students/promote', data);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to promote students');
+        }
+    }
+);
+
+export const fetchClassPerformance = createAsyncThunk(
+    'student/fetchClassPerformance',
+    async ({ classId, cycleId }, { rejectWithValue }) => {
+        try {
+            const params = {}
+            if (cycleId) params.cycleId = cycleId
+            const response = await API.get(`/api/school/manage/classes/${classId}/performance`, { params });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to load class performance');
+        }
+    }
+);
+
+const initialState = { items: [], loading: false, error: null, success: false, classPerformance: [], classPerformanceLoading: false };
 
 const studentSlice = createSlice({
     name: 'student',
@@ -72,7 +103,21 @@ const studentSlice = createSlice({
             .addCase(updateStudent.fulfilled, (state, action) => { state.loading = false; state.success = true; state.items = state.items.map((i) => i._id === action.payload.data._id ? action.payload.data : i); })
             .addCase(updateStudent.rejected, (state, action) => { state.loading = false; state.success = false; state.error = action.payload; })
 
-            .addCase(deleteStudent.fulfilled, (state, action) => { state.items = state.items.filter((i) => i._id !== action.payload.id); });
+            .addCase(deleteStudent.fulfilled, (state, action) => { state.items = state.items.filter((i) => i._id !== action.payload.id); })
+            .addCase(promoteStudents.fulfilled, (state) => {
+                state.loading = false;
+                state.success = true;
+            })
+            .addCase(promoteStudents.rejected, (state, action) => { state.loading = false; state.success = false; state.error = action.payload; })
+
+            .addCase(fetchClassPerformance.fulfilled, (state, action) => {
+                state.classPerformanceLoading = false;
+                state.classPerformance = action.payload?.data || [];
+            })
+            .addCase(fetchClassPerformance.rejected, (state, action) => {
+                state.classPerformanceLoading = false;
+                state.error = action.payload;
+            })
     },
 });
 

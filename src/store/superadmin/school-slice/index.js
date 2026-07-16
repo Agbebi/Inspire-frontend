@@ -5,6 +5,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 const initialState = {
     schools: [],
     school: null,
+    cycles: [],
     name: '',
     logoUrl: '',
     address: '',
@@ -84,6 +85,34 @@ export const removeSchool = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(
                 error.response?.data?.message || 'Failed to remove school'
+            )
+        }
+    }
+)
+
+export const toggleSchoolResultsLock = createAsyncThunk(
+    'superadmin/toggleSchoolResultsLock',
+    async (cycleId, { rejectWithValue }) => {
+        try {
+            const response = await API.put(`/api/superadmin/cycles/${cycleId}/toggle-results-lock`)
+            return response.data
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message || 'Failed to toggle results lock'
+            )
+        }
+    }
+)
+
+export const getSchoolCycles = createAsyncThunk(
+    'superadmin/getSchoolCycles',
+    async (schoolId, { rejectWithValue }) => {
+        try {
+            const response = await API.get(`/api/superadmin/school/${schoolId}/cycles`)
+            return response.data
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message || 'Failed to fetch school cycles'
             )
         }
     }
@@ -193,6 +222,28 @@ const schoolSlice = createSlice({
                 )
             })
             .addCase(removeSchool.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+            })
+
+            .addCase(toggleSchoolResultsLock.fulfilled, (state, action) => {
+                state.cycles = state.cycles.map((c) =>
+                    c._id === action.payload?.data?._id ? action.payload.data : c
+                )
+            })
+            .addCase(toggleSchoolResultsLock.rejected, (state, action) => {
+                state.error = action.payload
+            })
+
+            .addCase(getSchoolCycles.pending, (state) => {
+                state.loading = true
+                state.error = null
+            })
+            .addCase(getSchoolCycles.fulfilled, (state, action) => {
+                state.loading = false
+                state.cycles = action.payload?.data || []
+            })
+            .addCase(getSchoolCycles.rejected, (state, action) => {
                 state.loading = false
                 state.error = action.payload
             })

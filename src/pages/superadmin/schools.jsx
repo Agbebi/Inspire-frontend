@@ -125,9 +125,10 @@ export default function SuperAdminSchools() {
                   <th className="px-4 py-3 text-left font-medium text-muted-foreground">School</th>
                   <th className="px-4 py-3 text-left font-medium text-muted-foreground">Subdomain</th>
                   <th className="px-4 py-3 text-left font-medium text-muted-foreground">Support Email</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Address</th>
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">Status</th>
-                  <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
+                   <th className="px-4 py-3 text-left font-medium text-muted-foreground">Address</th>
+                   <th className="px-4 py-3 text-left font-medium text-muted-foreground">Students</th>
+                   <th className="px-4 py-3 text-left font-medium text-muted-foreground">Status</th>
+                   <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -144,6 +145,7 @@ export default function SuperAdminSchools() {
                     <td className="px-4 py-3 text-muted-foreground">{school.subDomain}</td>
                     <td className="px-4 py-3 text-muted-foreground">{school.supportEmail}</td>
                     <td className="px-4 py-3 text-muted-foreground">{school.address || "—"}</td>
+                    <td className="px-4 py-3 text-muted-foreground">{school.studentCount ?? 0}</td>
                     <td className="px-4 py-3">
                       <span
                         className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -155,34 +157,34 @@ export default function SuperAdminSchools() {
                         {school.subscriptionStatus || "inactive"}
                       </span>
                     </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => navigate(`/superadmin/schools/${school._id}`)}
-                        >
-                          View Details
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon-sm"
-                          onClick={() => openEditModal(school)}
-                          aria-label="Edit school"
-                        >
-                          <PencilIcon className="size-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon-sm"
-                          onClick={() => handleDelete(school._id)}
-                          aria-label="Delete school"
-                          className="text-destructive hover:text-destructive"
-                        >
-                          <TrashIcon className="size-4" />
-                        </Button>
-                      </div>
-                    </td>
+                     <td className="px-4 py-3">
+                       <div className="flex items-center justify-end gap-2">
+                         <Button
+                           variant="ghost"
+                           size="sm"
+                           onClick={() => navigate(`/superadmin/schools/${school._id}`)}
+                         >
+                           View Details
+                         </Button>
+                         <Button
+                           variant="ghost"
+                           size="icon-sm"
+                           onClick={() => openEditModal(school)}
+                           aria-label="Edit school"
+                         >
+                           <PencilIcon className="size-4" />
+                         </Button>
+                         <Button
+                           variant="ghost"
+                           size="icon-sm"
+                           onClick={() => handleDelete(school._id)}
+                           aria-label="Delete school"
+                           className="text-destructive hover:text-destructive"
+                         >
+                           <TrashIcon className="size-4" />
+                         </Button>
+                       </div>
+                     </td>
                   </tr>
                 ))}
               </tbody>

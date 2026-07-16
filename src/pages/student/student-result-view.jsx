@@ -6,13 +6,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import API from "@/api/axios"
+import { toast } from "sonner"
 
 function getGradeColor(grade) {
     switch (grade) {
         case 'A': return 'text-green-600 bg-green-500/10'
         case 'B': return 'text-blue-600 bg-blue-500/10'
         case 'C': return 'text-yellow-600 bg-yellow-500/10'
-        case 'D': return 'text-orange-600 bg-orange-500/10'
+        case 'D': return 'text-orange-600 text-orange-500/10'
         case 'F': return 'text-red-600 bg-red-500/10'
         default: return 'text-muted-foreground bg-muted'
     }
@@ -28,20 +31,63 @@ export default function StudentResultView() {
     const navigate = useNavigate()
     const location = useLocation()
     const { theme, setTheme } = useTheme()
-    const resultData = location.state?.resultData
 
-    if (!resultData) {
+    const [resultData, setResultData] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    const { admissionNumber, accessPin, cycleId } = location.state || {}
+
+    useEffect(() => {
+        async function loadResults() {
+            if (!admissionNumber || !accessPin || !cycleId) {
+                navigate(`/${slug}/student/cycles`, { state: { admissionNumber, accessPin } })
+                return
+            }
+
+            setLoading(true)
+            try {
+                const res = await API.get("/api/results/public", {
+                    params: { admissionNumber, accessPin, cycleId }
+                })
+                if (res.data?.success && res.data?.data) {
+                    setResultData(res.data.data)
+                } else {
+                    toast.error(res.data?.message || "Failed to load results")
+                }
+            } catch {
+                toast.error("Failed to load results")
+            } finally {
+                setLoading(false)
+            }
+        }
+        loadResults()
+    }, [admissionNumber, accessPin, cycleId, slug, navigate])
+
+    if (loading) {
         return (
             <div className="flex min-h-svh flex-col items-center justify-center p-4">
                 <div className="w-full max-w-sm space-y-4 text-center">
-                    <p className="text-sm text-muted-foreground">No result data found. Please login first.</p>
-                    <Button onClick={() => navigate(`/${slug}/login`)}>Go to Login</Button>
+                    <p className="text-sm text-muted-foreground">Loading results…</p>
                 </div>
             </div>
         )
     }
 
-    const { student, school, gradingScale, scores, principalRemark, position, totalInClass, subjectsOffered, totalScore, averageScore } = resultData
+    if (!resultData) {
+        return (
+            <div className="flex min-h-svh flex-col items-center justify-center p-4">
+                <div className="w-full max-w-sm space-y-4 text-center">
+                    <p className="text-sm text-muted-foreground">No result data found.</p>
+                    <Button onClick={() => navigate(`/${slug}/student/cycles`, { state: { admissionNumber, accessPin } })}>
+                        Back to Results
+                    </Button>
+                </div>
+            </div>
+        )
+    }
+
+    const { student, school, gradingScale, scores, principalRemark, position, totalInClass, subjectsOffered, totalScore, averageScore, cycle } = resultData
+    const caCount = school?.caConfig?.caCount || 3
 
     const positionRank = position ? position.split(' out of ')[0] : null
     const positionTotal = totalInClass ? `out of ${totalInClass}` : null
@@ -97,6 +143,8 @@ export default function StudentResultView() {
             nextFrame()
         }
     }
+
+    const sessionTermLabel = cycle ? `${cycle.session} — ${cycle.term}` : ""
 
     return (
         <div className="result-print-root min-h-svh overflow-auto bg-muted/30 p-4 lg:p-8">
@@ -199,10 +247,10 @@ export default function StudentResultView() {
                     <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => navigate(`/${slug}/student/login`)}
+                        onClick={() => navigate(`/${slug}/student/cycles`, { state: { admissionNumber, accessPin } })}
                         className="gap-1.5"
                     >
-                        <ArrowLeftIcon className="size-4" /> Back to Login
+                        <ArrowLeftIcon className="size-4" /> Back to Results
                     </Button>
                     <Button
                         variant="outline"
@@ -225,6 +273,9 @@ export default function StudentResultView() {
                                 <p className="text-sm italic text-muted-foreground">"{school.motto}"</p>
                             ) : (
                                 <p className="text-xs text-muted-foreground">{school.subDomain}</p>
+                            )}
+                            {sessionTermLabel && (
+                                <p className="text-xs font-medium text-muted-foreground">{sessionTermLabel}</p>
                             )}
                         </div>
                         <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground pt-2">
@@ -252,15 +303,6 @@ export default function StudentResultView() {
                                     {student.className}{student.classArm ? ` ${student.classArm}` : ""}
                                 </p>
                             </div>
-                            {/* {position && (
-                                <div>
-                                    <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Class Position</p>
-                                    <p className="mt-1 text-sm font-medium flex items-center gap-1">
-                                        <span className="text-amber-500">🏆</span>
-                                        {position}
-                                    </p>
-                                </div>
-                            )} */}
                         </div>
                     </CardContent>
                 </Card>
@@ -336,8 +378,12 @@ export default function StudentResultView() {
                                                 <th className="px-4 py-3 font-medium">Subject</th>
                                                 <th className="px-4 py-3 font-medium text-center">CA1</th>
                                                 <th className="px-4 py-3 font-medium text-center">CA2</th>
+                                                {caCount === 3 && (
+                                                    <th className="px-4 py-3 font-medium text-center">CA3</th>
+                                                )}
                                                 <th className="px-4 py-3 font-medium text-center">Exam</th>
                                                 <th className="px-4 py-3 font-medium text-center">Total</th>
+                                                <th className="px-4 py-3 font-medium text-center">Class Avg</th>
                                                 <th className="px-4 py-3 font-medium text-center">Grade</th>
                                                 <th className="px-4 py-3 font-medium">Remark</th>
                                             </tr>
@@ -351,8 +397,12 @@ export default function StudentResultView() {
                                                     </td>
                                                     <td className="px-4 py-3 text-center">{score.ca1 ?? "—"}</td>
                                                     <td className="px-4 py-3 text-center">{score.ca2 ?? "—"}</td>
+                                                    {caCount === 3 && (
+                                                        <td className="px-4 py-3 text-center">{score.ca3 ?? "—"}</td>
+                                                    )}
                                                     <td className="px-4 py-3 text-center">{score.exam ?? "—"}</td>
                                                     <td className="px-4 py-3 text-center font-medium">{score.total ?? "—"}</td>
+                                                    <td className="px-4 py-3 text-center">{score.classAverage ?? "—"}</td>
                                                     <td className="px-4 py-3 text-center">
                                                         <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${getGradeColor(score.grade)}`}>
                                                             {score.grade || "—"}

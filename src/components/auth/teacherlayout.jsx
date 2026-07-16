@@ -1,5 +1,6 @@
-import { Outlet, Link, useParams, useNavigate } from "react-router-dom"
+import { Outlet, Link, useParams, useNavigate, useLocation } from "react-router-dom"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { CycleProvider } from "@/components/common/cycle-provider"
 import { useState, useEffect } from "react"
 import {
   MenuIcon,
@@ -21,6 +22,7 @@ const navItems = [
 export default function TeacherLayout() {
   const { slug } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [schoolName, setSchoolName] = useState(slug)
 
@@ -43,10 +45,11 @@ export default function TeacherLayout() {
   }
 
   return (
-    <div className="flex h-svh">
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+    <CycleProvider>
+      <div className="flex h-svh">
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -58,40 +61,49 @@ export default function TeacherLayout() {
         `}
       >
         <div className="flex h-full flex-col">
-          <div className="flex items-center justify-between border-b border-border px-4 py-4">
-            <div className="flex items-center gap-2">
-              <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <SchoolIcon className="size-4" />
-              </div>
-              <span className="max-w-[10rem] truncate font-semibold tracking-tight">
-                {schoolName}
-              </span>
-            </div>
+          <div className="relative border-b border-border px-4 py-4">
             <button
               onClick={() => setSidebarOpen(false)}
-              className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
+              className="absolute right-4 top-4 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
             >
               <XIcon className="size-4" />
             </button>
+            <div className="flex flex-col items-center gap-2 pt-2">
+              <div className="flex size-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <SchoolIcon className="size-5" />
+              </div>
+              <span className="max-w-[10rem] truncate text-center text-base font-semibold tracking-tight">
+                {schoolName}
+              </span>
+            </div>
           </div>
 
           <nav className="flex-1 space-y-1 overflow-y-auto p-3">
-            {navItems.map((item) => (
-              <Link
-                key={item.label}
-                to={`/${slug}/teacher${item.href}`}
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              >
-                <item.icon className="size-4" />
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const to = `/${slug}/teacher${item.href}`
+              const isActive = location.pathname === to
+              return (
+                <Link
+                  key={item.label}
+                  to={to}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-muted text-foreground shadow-[0_0_8px_rgba(0,0,0,0.08)] dark:shadow-[0_0_8px_rgba(255,255,255,0.12)]"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  }`}
+                >
+                  <item.icon className="size-4" />
+                  {item.label}
+                </Link>
+              )
+            })}
           </nav>
 
           <div className="border-t border-border p-3 space-y-1">
             <button
               onClick={handleLogout}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+              className="flex w-full items-center justify-center gap-3 rounded-lg border border-red-500/20 px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground shadow-[0_0_8px_rgba(239,68,68,0.15)]"
             >
               <LogOutIcon className="size-4" />
               Logout
@@ -119,5 +131,6 @@ export default function TeacherLayout() {
         </main>
       </div>
     </div>
+    </CycleProvider>
   )
 }

@@ -18,6 +18,9 @@ import SchoolAdminSubjects from "./pages/school-admin/subjects"
 import SchoolAdminResults from "./pages/school-admin/results"
 import SchoolAdminSettings from "./pages/school-admin/settings"
 import SchoolAdminStudentDetail from "./pages/school-admin/student-detail"
+import SchoolAdminCycles from "./pages/school-admin/cycles"
+import SchoolAdminPromote from "./pages/school-admin/promote"
+import SchoolAdminAnalytics from "./pages/school-admin/analytics"
 import SchoolAdminAuthGuard from "./components/common/schooladminauthguard"
 import SuperAdminAuthGuard from "./components/common/requireauth"
 import TeacherAuthGuard from "./components/common/teacherauthguard"
@@ -25,6 +28,7 @@ import TeacherDashboard from "./pages/teacher/dashboard"
 import TeacherClasses from "./pages/teacher/classes"
 import TeacherResults from "./pages/teacher/results"
 import StudentLogin from "./pages/student-login"
+import StudentCycles from "./pages/student/student-cycles"
 import StudentResultView from "./pages/student/student-result-view"
 import NotFoundPage from "./pages/not-found-page"
 import UnauthorizedPage from "./pages/unauthorized-page"
@@ -79,6 +83,9 @@ function App() {
             <Route path="subjects" element={<SchoolAdminSubjects />} />
             <Route path="results" element={<SchoolAdminResults />} />
             <Route path="settings" element={<SchoolAdminSettings />} />
+            <Route path="cycles" element={<SchoolAdminCycles />} />
+            <Route path="promote" element={<SchoolAdminPromote />} />
+            <Route path="analytics" element={<SchoolAdminAnalytics />} />
           </Route>
 
           <Route path="/:slug/teacher" element={<TeacherAuthGuard />}>
@@ -90,6 +97,7 @@ function App() {
 
           <Route path="/:slug/student">
             <Route path="login" element={<StudentLogin />} />
+            <Route path="cycles" element={<StudentCycles />} />
             <Route path="results" element={<StudentResultView />} />
           </Route>
 

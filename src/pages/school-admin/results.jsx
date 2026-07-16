@@ -4,6 +4,8 @@ import { ArrowLeftIcon, ClipboardCheckIcon, UsersIcon, SchoolIcon, AlertTriangle
 import { Button } from "@/components/ui/button"
 import Modal from "@/components/common/modal"
 import { PageLoading, CardLoading } from "@/components/ui/loading"
+import CycleSelector from "@/components/common/cycle-selector"
+import { useCycle } from "@/components/common/use-cycle"
 import API from "@/api/axios"
 import { toast } from "sonner"
 
@@ -13,6 +15,7 @@ function toSentenceCase(str) {
 }
 
 export default function Results() {
+    const { selectedCycleId } = useCycle()
     const [view, setView] = useState("classes")
     const [classes, setClasses] = useState([])
     const [students, setStudents] = useState([])
@@ -24,13 +27,24 @@ export default function Results() {
     const [missingOpen, setMissingOpen] = useState(false)
     const [missing, setMissing] = useState([])
     const [missingLoading, setMissingLoading] = useState(false)
+    const [caConfig, setCaConfig] = useState({ caCount: 3, caMaxScores: [10, 10, 20], examMaxScore: 70 })
 
     useEffect(() => {
         async function loadClasses() {
             setLoading(true)
             try {
-                const res = await API.get("/api/school/manage/classes")
-                setClasses(res.data?.data || [])
+                const [cRes, sRes] = await Promise.all([
+                    API.get("/api/school/manage/classes"),
+                    API.get("/api/school/manage/settings"),
+                ])
+                setClasses(cRes.data?.data || [])
+                const settings = sRes.data?.data || {}
+                const count = settings.caConfig?.caCount || 3
+                setCaConfig({
+                    caCount: count,
+                    caMaxScores: settings.caConfig?.caMaxScores || (count === 2 ? [15, 15] : [10, 10, 20]),
+                    examMaxScore: settings.caConfig?.examMaxScore || 70,
+                })
             } catch {
                 setClasses([])
             } finally {
@@ -58,7 +72,9 @@ export default function Results() {
         setSelectedStudent(student)
         setLoading(true)
         try {
-            const res = await API.get(`/api/school/manage/students/${student._id}/results`)
+            const params = {}
+            if (selectedCycleId) params.cycleId = selectedCycleId
+            const res = await API.get(`/api/school/manage/students/${student._id}/results`, { params })
             setResults(res.data?.data || [])
             setView("report")
         } catch {
@@ -84,7 +100,9 @@ export default function Results() {
         setMissingLoading(true)
         setMissingOpen(true)
         try {
-            const res = await API.get("/api/school/manage/results/missing")
+            const params = {}
+            if (selectedCycleId) params.cycleId = selectedCycleId
+            const res = await API.get("/api/school/manage/results/missing", { params })
             setMissing(res.data?.data || [])
         } catch {
             setMissing([])
@@ -134,8 +152,8 @@ export default function Results() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div className="space-y-1">
+            <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
+                <div className="space-y-1 text-center md:text-left">
                     <h1 className="text-2xl font-semibold tracking-tight">Results</h1>
                     <p className="text-sm text-muted-foreground">
                         {view === "classes" && "Select a class to view student results."}
@@ -152,6 +170,9 @@ export default function Results() {
                     <Button variant="outline" size="sm" onClick={checkMissing} className="gap-1.5">
                         <AlertTriangleIcon className="size-4" /> Check Missing Results
                     </Button>
+                )}
+                {view === "classes" && (
+                    <CycleSelector />
                 )}
             </div>
 
@@ -259,6 +280,9 @@ export default function Results() {
                                                 <th className="px-4 py-3 font-medium">Subject</th>
                                                 <th className="px-4 py-3 font-medium">CA1</th>
                                                 <th className="px-4 py-3 font-medium">CA2</th>
+                                                {caConfig.caCount === 3 && (
+                                                    <th className="px-4 py-3 font-medium">CA3</th>
+                                                )}
                                                 <th className="px-4 py-3 font-medium">Exam</th>
                                                 <th className="px-4 py-3 font-medium">Total</th>
                                                 <th className="px-4 py-3 font-medium">Grade</th>
@@ -272,10 +296,13 @@ export default function Results() {
                                                     <td className="px-4 py-3 font-medium">{r.subjectId?.name || "—"}</td>
                                                     <td className="px-4 py-3">{r.ca1 ?? "—"}</td>
                                                     <td className="px-4 py-3">{r.ca2 ?? "—"}</td>
+                                                    {caConfig.caCount === 3 && (
+                                                        <td className="px-4 py-3">{r.ca3 ?? "—"}</td>
+                                                    )}
                                                     <td className="px-4 py-3">{r.exam ?? "—"}</td>
                                                     <td className="px-4 py-3">{r.total ?? "—"}</td>
                                                     <td className="px-4 py-3">{r.grade || "—"}</td>
-                                                    <td className="px-4 py-3">{toSentenceCase(r.remark)}</td>
+                                                    <td className="px-4 py-3 text-muted-foreground">{toSentenceCase(r.remark)}</td>
                                                     <td className="px-4 py-3 text-muted-foreground">{r.teacherId?.name || "—"}</td>
                                                 </tr>
                                             ))}

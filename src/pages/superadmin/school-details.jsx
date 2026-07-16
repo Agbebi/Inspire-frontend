@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom"
-import { ArrowLeftIcon, PencilIcon, TrashIcon, SchoolIcon, MailIcon, GlobeIcon, MapPinIcon, CalendarIcon } from "lucide-react"
+import { ArrowLeftIcon, PencilIcon, TrashIcon, SchoolIcon, MailIcon, GlobeIcon, MapPinIcon, CalendarIcon, UsersIcon, LockIcon, UnlockIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,8 @@ import {
   removeSchool,
   clearSchoolError,
   editSchool,
+  getSchoolCycles,
+  toggleSchoolResultsLock,
 } from "@/store/superadmin/school-slice"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -19,9 +21,29 @@ export default function SchoolDetails() {
   const { id } = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { school, loading, error } = useSelector((state) => state.school)
+  const { school, loading, error, cycles } = useSelector((state) => state.school)
 
   const [modalOpen, setModalOpen] = useState(false)
+  const [togglingLockId, setTogglingLockId] = useState(null)
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getSchool(id))
+      dispatch(getSchoolCycles(id))
+    }
+  }, [dispatch, id])
+
+  async function handleToggleCycleLock(cycleId) {
+    setTogglingLockId(cycleId)
+    try {
+      await dispatch(toggleSchoolResultsLock(cycleId)).unwrap()
+      toast.success("Cycle lock updated")
+    } catch {
+      toast.error("Failed to update lock")
+    } finally {
+      setTogglingLockId(null)
+    }
+  }
 
   useEffect(() => {
     if (id) {
@@ -129,55 +151,65 @@ export default function SchoolDetails() {
         </div>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          <div className="rounded-xl border border-border bg-card p-6">
-            <h3 className="font-medium mb-4">School Information</h3>
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground">
-                  <SchoolIcon className="size-5" />
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium">Name</p>
-                  <p className="text-sm text-muted-foreground">{school.name}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground">
-                  <GlobeIcon className="size-5" />
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium">Subdomain</p>
-                  <p className="text-sm text-muted-foreground">{school.subDomain}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground">
-                  <MailIcon className="size-5" />
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-medium">Support Email</p>
-                  <p className="text-sm text-muted-foreground">{school.supportEmail}</p>
-                </div>
-              </div>
-
-              {school.address && (
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="rounded-xl border border-border bg-card p-6">
+              <h3 className="font-medium mb-4">School Information</h3>
+              <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground">
-                    <MapPinIcon className="size-5" />
+                    <SchoolIcon className="size-5" />
                   </div>
                   <div className="space-y-1">
-                    <p className="text-sm font-medium">Address</p>
-                    <p className="text-sm text-muted-foreground">{school.address}</p>
+                    <p className="text-sm font-medium">Name</p>
+                    <p className="text-sm text-muted-foreground">{school.name}</p>
                   </div>
                 </div>
-              )}
+
+                <div className="flex items-start gap-3">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground">
+                    <GlobeIcon className="size-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Subdomain</p>
+                    <p className="text-sm text-muted-foreground">{school.subDomain}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground">
+                    <MailIcon className="size-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Support Email</p>
+                    <p className="text-sm text-muted-foreground">{school.supportEmail}</p>
+                  </div>
+                </div>
+
+                {school.address && (
+                  <div className="flex items-start gap-3">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground">
+                      <MapPinIcon className="size-5" />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium">Address</p>
+                      <p className="text-sm text-muted-foreground">{school.address}</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex items-start gap-3">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground">
+                    <UsersIcon className="size-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="text-sm font-medium">Total Registered Students</p>
+                    <p className="text-sm text-muted-foreground">{school.studentCount ?? 0}</p>
+                  </div>
+                </div>
+          </div>
             </div>
           </div>
-        </div>
 
         <div className="space-y-4">
           <div className="rounded-xl border border-border bg-card p-6">
@@ -201,6 +233,42 @@ export default function SchoolDetails() {
                   {school.createdAt ? new Date(school.createdAt).toLocaleDateString() : "—"}
                 </span>
               </div>
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-border bg-card p-6">
+            <h3 className="font-medium mb-4">Term Locks</h3>
+            <div className="space-y-2">
+              {cycles.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No cycles yet.</p>
+              ) : (
+                cycles.map((cycle) => (
+                  <div key={cycle._id} className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2">
+                    <div>
+                      <p className="text-sm font-medium">{cycle.session} — {cycle.term}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {cycle.isPublished ? "Published" : "Draft"}
+                        {cycle.isCurrent ? " • Current" : ""}
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleToggleCycleLock(cycle._id)}
+                      disabled={togglingLockId === cycle._id}
+                      className="gap-1.5"
+                    >
+                      {togglingLockId === cycle._id ? (
+                        "Saving…"
+                      ) : cycle.resultsLocked ? (
+                        <><UnlockIcon className="size-4" /> Unlock</>
+                      ) : (
+                        <><LockIcon className="size-4" /> Lock</>
+                      )}
+                    </Button>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 

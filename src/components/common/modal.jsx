@@ -1,7 +1,6 @@
-import * as React from "react"
 import { XIcon } from "lucide-react"
 
-export default function Modal({ open, onClose, title, children, footer }) {
+export default function Modal({ open, onClose, title, subtitle, children, footer }) {
     if (!open) return null
     return (
         <div
@@ -13,7 +12,10 @@ export default function Modal({ open, onClose, title, children, footer }) {
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="flex items-center justify-between border-b border-border px-5 py-4">
-                    <h2 className="text-lg font-semibold">{title}</h2>
+                    <div>
+                        <h2 className="text-lg font-semibold">{title}</h2>
+                        {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
+                    </div>
                     <button
                         onClick={onClose}
                         className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted"

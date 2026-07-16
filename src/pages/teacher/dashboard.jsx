@@ -5,10 +5,12 @@ import { BookOpenIcon, UsersIcon, ClipboardCheckIcon } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PageLoading } from "@/components/ui/loading"
 import API from "@/api/axios"
+import { useCycle } from "@/components/common/use-cycle"
 
 export default function TeacherDashboard() {
   const { slug } = useParams()
   const navigate = useNavigate()
+  const { selectedCycleId } = useCycle()
   const [teacher, setTeacher] = useState(null)
   const [classes, setClasses] = useState([])
   const [results, setResults] = useState([])
@@ -21,7 +23,7 @@ export default function TeacherDashboard() {
         const [tRes, cRes, rRes] = await Promise.all([
           API.get("/api/school/manage/teachers/me"),
           API.get("/api/school/manage/teachers/me/classes"),
-          API.get("/api/school/manage/teachers/me/results"),
+          API.get("/api/school/manage/teachers/me/results", { params: selectedCycleId ? { cycleId: selectedCycleId } : {} }),
         ])
         setTeacher(tRes.data?.data || null)
         setClasses(cRes.data?.data || [])
@@ -33,7 +35,7 @@ export default function TeacherDashboard() {
       }
     }
     load()
-  }, [])
+  }, [selectedCycleId])
 
   const stats = useMemo(() => {
     if (!teacher) return null
@@ -52,6 +54,14 @@ export default function TeacherDashboard() {
     return (
       <div className="space-y-4">
         <p className="text-sm text-muted-foreground">Unable to load teacher profile.</p>
+      </div>
+    )
+  }
+
+  if (!selectedCycleId) {
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-muted-foreground">Please select an academic cycle to view results.</p>
       </div>
     )
   }

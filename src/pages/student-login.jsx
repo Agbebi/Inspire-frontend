@@ -31,12 +31,17 @@ export default function StudentLogin() {
         e.preventDefault()
         setLoading(true)
         try {
-            const res = await API.get("/api/results/public", {
+            const res = await API.get("/api/results/public/cycles", {
                 params: { admissionNumber, accessPin }
             })
             if (res.data?.success && res.data?.data) {
-                navigate(`/${slug}/student/results`, {
-                    state: { resultData: res.data.data }
+                navigate(`/${slug}/student/cycles`, {
+                    state: {
+                        admissionNumber,
+                        accessPin,
+                        student: res.data.data.student,
+                        cycles: res.data.data.cycles,
+                    }
                 })
             } else {
                 toast.error(res.data?.message || "Invalid credentials")
