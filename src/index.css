@@ -139,7 +139,7 @@
 
 @layer utilities {
   .glow-border {
-    @apply border-border shadow-[0_0_0_1px_rgba(0,0,0,0.06)] transition-shadow duration-300;
+    @apply border-border transition-[border-color,_box-shadow] duration-300;
   }
   .dark .glow-border {
     @apply border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.12)];
