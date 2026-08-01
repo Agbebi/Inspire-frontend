@@ -4,8 +4,8 @@
   "description": "A Result Management System for schools",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#863bff",
+  "background_color": "#ffffff00",
+  "theme_color": "#00000000",
   "orientation": "portrait-primary",
   "scope": "/",
   "icons": [
