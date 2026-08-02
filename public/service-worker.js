@@ -1,13 +1,12 @@
-const CACHE_NAME = 'tims-rms-cache-v2';
+const CACHE_NAME = 'tims-rms-cache-v3';
 const urlsToCache = [
     '/',
     '/index.html',
     '/offline.html',
     '/manifest.json',
-    '/favicon.svg',
     '/favicon-192.png',
     '/favicon-512.png',
-    '/icons.svg'
+    '/service-worker.js'
 ];
 
 const self = this;
