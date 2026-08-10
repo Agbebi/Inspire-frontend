@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux"
 import { logout } from "@/store/superadmin/index"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
+import { Zhipu } from '@thesvg/react'
 
 const navItems = [
   { icon: LayoutDashboardIcon, label: "Dashboard", href: "/superadmin/dashboard" },
@@ -101,7 +102,10 @@ export default function AdminLayout() {
           >
             <MenuIcon className="size-5" />
           </button>
-          <span className="text-sm font-semibold tracking-tight text-brand">Inspire</span>
+          <span className="text-sm font-semibold tracking-tight text-brand flex items-center gap-2">
+            <Zhipu className="size-5" />
+            Craftie
+          </span>
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />
           </div>

@@ -1,13 +1,8 @@
-import {
-  GraduationCap,
-  BarChart3,
-  Users,
-  ShieldCheck,
-} from "lucide-react"
-
+import { GraduationCap, BarChart3, Users, ShieldCheck } from "lucide-react"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { cn } from "@/lib/utils"
 import { Outlet } from "react-router-dom"
+import { Zhipu } from '@thesvg/react'
 
 const features = [
   {
@@ -33,7 +28,7 @@ const features = [
 ]
 
 export default function AuthLayout({
-  brandName = "Inspire",
+  brandName = "Craftie",
   tagline = "The all-in-one platform for effortless school result management.",
 }) {
   return (
@@ -47,8 +42,8 @@ export default function AuthLayout({
 
         <div className="relative z-10 flex h-full flex-col justify-between gap-6 p-8 xl:p-10">
           <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white shadow-sm">
-              <GraduationCap className="size-5" />
+            <div className="flex size-10 items-center justify-center">
+              <Zhipu className="size-7" />
             </div>
             <span className="text-base font-semibold tracking-tight text-white">
               {brandName}
@@ -98,8 +93,8 @@ export default function AuthLayout({
       <div className="flex flex-col gap-4">
         <header className="flex items-center justify-between gap-4 p-5 md:p-8">
           <div className="flex items-center gap-2 lg:hidden">
-            <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <GraduationCap className="size-5" />
+            <div className="flex size-9 items-center justify-center">
+              <Zhipu className="size-6" />
             </div>
             <span className="font-semibold tracking-tight">{brandName}</span>
           </div>

@@ -1,6 +1,6 @@
 {
-  "name": "Inspire RMS",
-  "short_name": "Inspire RMS",
+  "name": "Craftie",
+  "short_name": "Craftie",
   "description": "A Result Management System for schools",
   "start_url": "/",
   "display": "standalone",
@@ -17,7 +17,7 @@
       "purpose": "any"
     },
     {
-      "src": "/favicon-512.png",
+      "src": "/zhipu-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable any"

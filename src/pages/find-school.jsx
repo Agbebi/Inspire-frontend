@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { SearchIcon, SchoolIcon, Loader2Icon, ChevronRightIcon, HomeIcon } from "lucide-react"
+import { SearchIcon, SchoolIcon, Loader2Icon, ChevronRightIcon, HomeIcon, ArrowLeftIcon } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -67,13 +67,13 @@ export default function FindSchool() {
 
   return (
     <div className="space-y-6" ref={containerRef}>
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-center">
         <Link
           to="/"
           aria-label="Back to home"
-          className="rounded-md border border-primary/20 bg-primary/5 p-1.5 text-primary transition-colors hover:bg-primary/10"
+          className=" flex items-center gap-2 rounded-md borde border-primary/20 bg-primar/5 p-1.5 text-primary transition-colors hover:bg-primary/10"
         >
-          <HomeIcon className="size-4" />
+          <ArrowLeftIcon className="size-4" /> <span>Back to home</span>
         </Link>
       </div>
 

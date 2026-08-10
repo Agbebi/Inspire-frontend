@@ -313,7 +313,7 @@ export default function TeacherResults() {
           <h1 className="text-2xl font-semibold tracking-tight">Results</h1>
           <p className="text-sm text-muted-foreground">Manage results for your classes.</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center flex-col sm:flex-row gap-2">
           <CycleSelector />
           <Button onClick={openAdd} className="gap-2 w-full sm:w-auto" disabled={isPublished || !selectedCycleId}>
             <PlusIcon className="size-4" /> Add Result

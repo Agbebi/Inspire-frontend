@@ -1,11 +1,11 @@
-const CACHE_NAME = 'tims-rms-cache-v3';
+const CACHE_NAME = 'craftie-rms-cache-v1';
 const urlsToCache = [
     '/',
     '/index.html',
     '/offline.html',
     '/manifest.json',
     '/favicon-192.png',
-    '/favicon-512.png',
+    '/zhipu-512.png',
     '/service-worker.js'
 ];
 

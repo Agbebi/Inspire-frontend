@@ -121,12 +121,15 @@ export default function LoginSchool() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <Link
-              to="#"
-              className="text-xs font-medium text-primary underline-offset-4 hover:underline"
-            >
-              Forgot password?
-            </Link>
+          <button
+            type="button"
+            onClick={() => toast.info("Password reset", {
+              description: "Please contact your school administrator to reset your password.",
+            })}
+            className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+          >
+            Forgot password?
+          </button>
           </div>
           <div className="relative">
             <LockIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import { useNavigate, useParams, Link, useLocation } from "react-router-dom"
-import { GraduationCapIcon, HomeIcon, LockIcon, ClipboardCheckIcon } from "lucide-react"
+import { GraduationCapIcon, ArrowLeftIcon, LockIcon, ClipboardCheckIcon } from "lucide-react"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { ThemeToggle } from "@/components/ui/theme-toggle"
 import API from "@/api/axios"
 import { toast } from "sonner"
 
@@ -69,18 +68,16 @@ export default function StudentCycles() {
 
     return (
         <div className="flex min-h-svh flex-col items-center justify-center p-4">
-            <div className="absolute top-4 right-4 flex items-center gap-2">
-                <Link
-                    to="/"
-                    aria-label="Back to home"
-                    className="rounded-md border border-primary/20 bg-primary/5 p-1.5 text-primary transition-colors hover:bg-primary/10"
-                >
-                    <HomeIcon className="size-4" />
-                </Link>
-                <ThemeToggle />
-            </div>
-
             <div className="w-full max-w-lg space-y-6">
+                <div className="flex justify-center">
+                    <Link
+                        to={`/${slug}/student/login`}
+                        className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+                    >
+                        <ArrowLeftIcon className="size-4" />
+                        Go back
+                    </Link>
+                </div>
                 <div className="flex flex-col items-center gap-2 text-center">
                     <div className="flex size-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                         <GraduationCapIcon className="size-5" />

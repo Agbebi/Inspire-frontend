@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import { toast } from "sonner"
-import { EyeIcon, EyeOffIcon, MailIcon, LockIcon, GlobeIcon, ShieldCheckIcon } from "lucide-react"
+import { EyeIcon, EyeOffIcon, MailIcon, LockIcon, GlobeIcon, ShieldCheckIcon, ArrowLeftIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -50,6 +50,16 @@ export default function Login() {
             Access the platform administration dashboard.
           </p>
         </div>
+      </div>
+
+      <div className="flex justify-center">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeftIcon className="size-4" />
+          Go back
+        </Link>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">

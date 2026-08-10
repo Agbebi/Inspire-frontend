@@ -3,6 +3,7 @@ import { GraduationCapIcon, BarChart3Icon, UsersIcon, ShieldCheckIcon, SearchIco
 
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { Zhipu } from '@thesvg/react';
 
 const features = [
   {
@@ -70,10 +71,10 @@ export default function HomePage() {
     <div className="flex flex-col min-h-svh">
       <header className="flex items-center justify-between px-4 py-3 lg:px-6">
         <div className="flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <GraduationCapIcon className="size-4" />
+          <div className="flex size-8 items-center justify-center">
+            <Zhipu className="size-7" />
           </div>
-          <span className="font-semibold tracking-tight">Inspire</span>
+          <span className="font-semibold tracking-tight">Craftie</span>
         </div>
         <ThemeToggle />
       </header>
@@ -155,7 +156,7 @@ export default function HomePage() {
 
       <footer className="border-t border-border px-4 py-6 lg:px-6">
         <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
-          <p>© {new Date().getFullYear()} Inspire. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Craftie. All rights reserved.</p>
           <p>Built for schools that value clarity and confidence.</p>
         </div>
       </footer>
