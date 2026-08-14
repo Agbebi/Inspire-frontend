@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const devUrl = 'https://inspire-backend-production.up.railway.app'
+const devUrl = 'https://inspire-backend-3zkb.onrender.com'
 // const devUrl = 'http://localhost:3000'
 
 const API = axios.create({
