@@ -203,15 +203,16 @@ export default function CycleManagement() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">Academic Cycles</h1>
+        <div className="space-y-8">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Academic</p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground">Academic Cycles</h1>
                     <p className="text-sm text-muted-foreground">
                         Manage sessions and terms. Set the current cycle and publish results for students.
                     </p>
                 </div>
-                <div className="flex flex-col md:flex-row items-center gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                     <Button onClick={openAdd} className="gap-2">
                         <PlusIcon className="size-4" /> Add Cycle
                     </Button>
@@ -222,50 +223,50 @@ export default function CycleManagement() {
             </div>
 
             {items.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                    <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-20 text-center">
+                    <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
                         <CalendarIcon className="size-6" />
                     </div>
-                    <h3 className="mt-4 text-sm font-medium">No academic cycles</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Create a session and term to start recording results.</p>
+                    <h3 className="mt-5 text-base font-semibold text-foreground">No academic cycles</h3>
+                    <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">Create a session and term to start recording results.</p>
                 </div>
             ) : (
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     {items.map((cycle) => (
                         <div
                             key={cycle._id}
-                            className="rounded-xl border border-border bg-card p-5"
+                            className="rounded-2xl border border-border bg-card p-6"
                         >
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <h3 className="font-medium">{cycle.session}</h3>
-                                    <p className="text-sm text-muted-foreground">{cycle.term}</p>
+                            <div className="flex items-start justify-between gap-3">
+                                <div className="space-y-1">
+                                    <h3 className="font-medium text-foreground">{cycle.session}</h3>
+                                    <p className="text-[0.8rem] text-muted-foreground">{cycle.term}</p>
                                 </div>
                                 {cycle.isCurrent && (
-                                    <span className="inline-flex items-center rounded-full bg-green-500/10 px-2 py-0.5 text-xs font-medium text-green-600">
+                                    <span className="inline-flex items-center rounded-full bg-green-500/10 px-2.5 py-0.5 text-[0.7rem] font-medium text-green-600 dark:text-green-400">
                                         Current
                                     </span>
                                 )}
                             </div>
 
-                            <div className="mt-3 flex items-center gap-2">
+                            <div className="mt-4 flex flex-wrap items-center gap-2">
                                 {cycle.isPublished ? (
-                                    <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2 py-0.5 text-xs font-medium text-blue-600">
+                                    <span className="inline-flex items-center rounded-full bg-blue-500/10 px-2.5 py-0.5 text-[0.7rem] font-medium text-blue-600 dark:text-blue-400">
                                         <EyeIcon className="mr-1 size-3" /> Published
                                     </span>
                                 ) : (
-                                    <span className="inline-flex items-center rounded-full bg-yellow-500/10 px-2 py-0.5 text-xs font-medium text-yellow-600">
+                                    <span className="inline-flex items-center rounded-full bg-yellow-500/10 px-2.5 py-0.5 text-[0.7rem] font-medium text-yellow-600 dark:text-yellow-400">
                                         <EyeOffIcon className="mr-1 size-3" /> Draft
                                     </span>
                                 )}
                                 {cycle.resultsLocked && (
-                                    <span className="inline-flex items-center rounded-full bg-red-500/10 px-2 py-0.5 text-xs font-medium text-red-600">
+                                    <span className="inline-flex items-center rounded-full bg-red-500/10 px-2.5 py-0.5 text-[0.7rem] font-medium text-red-600 dark:text-red-400">
                                         <LockIcon className="mr-1 size-3" /> Locked
                                     </span>
                                 )}
                             </div>
 
-                            <div className="mt-4 flex items-center gap-2">
+                            <div className="mt-5 flex flex-wrap items-center gap-1.5">
                                 {canStartNextTerm(cycle) && (
                                     <Button
                                         variant="ghost"

@@ -81,20 +81,21 @@ export default function Settings() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="space-y-1">
-                <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
+        <div className="space-y-8">
+            <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Configuration</p>
+                <h1 className="text-2xl font-semibold tracking-tight text-foreground">Settings</h1>
                 <p className="text-sm text-muted-foreground">Manage your school profile and result configuration.</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="max-w-xl space-y-4">
-                <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+            <form onSubmit={handleSubmit} className="max-w-xl space-y-6">
+                <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
                     <div className="flex items-center gap-3">
-                        <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                             <SchoolIcon className="size-5" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium">School Profile</p>
+                            <p className="text-[0.8rem] font-medium text-foreground">School Profile</p>
                             <p className="text-xs text-muted-foreground">{school?.subDomain}</p>
                         </div>
                     </div>
@@ -121,13 +122,13 @@ export default function Settings() {
                     </div>
                 </div>
 
-                <div className="rounded-xl border border-border bg-card p-5 space-y-4">
+                <div className="rounded-2xl border border-border bg-card p-6 space-y-5">
                     <div className="flex items-center gap-3">
-                        <div className="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <div className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
                             <ClipboardCheckIcon className="size-5" />
                         </div>
                         <div>
-                            <p className="text-sm font-medium">Result Configuration</p>
+                            <p className="text-[0.8rem] font-medium text-foreground">Result Configuration</p>
                             <p className="text-xs text-muted-foreground">Set how student results are recorded and scored.</p>
                         </div>
                     </div>
@@ -148,7 +149,7 @@ export default function Settings() {
                                     setExamMaxScore(70)
                                 }
                             }}
-                            className="h-10 w-full rounded-lg border border-border bg-background px-3 pr-8 text-sm"
+                            className="select-premium"
                         >
                             <option value="2">2 CAs</option>
                             <option value="3">3 CAs</option>

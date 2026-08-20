@@ -58,67 +58,108 @@ export default function SchoolAdminDashboard() {
   }, [])
 
   const quickActions = [
-    { icon: UserPlusIcon, label: "Add Student", onClick: () => navigate(`/${slug}/admin/students`) },
-    { icon: PlusIcon, label: "Add Teacher", onClick: () => navigate(`/${slug}/admin/teachers`) },
-    { icon: BookOpenIcon, label: "Create Class", onClick: () => navigate(`/${slug}/admin/classes`) },
-    { icon: ClipboardCheckIcon, label: "View Results", onClick: () => navigate(`/${slug}/admin/results`) },
+    { icon: UserPlusIcon, label: "Add Student", description: "Enroll a new learner", onClick: () => navigate(`/${slug}/admin/students`) },
+    { icon: PlusIcon, label: "Add Teacher", description: "Invite a staff member", onClick: () => navigate(`/${slug}/admin/teachers`) },
+    { icon: BookOpenIcon, label: "Create Class", description: "Set up a new class", onClick: () => navigate(`/${slug}/admin/classes`) },
+    { icon: ClipboardCheckIcon, label: "View Results", description: "Review published results", onClick: () => navigate(`/${slug}/admin/results`) },
   ]
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Welcome back, {adminName}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Here's an overview of {schoolName}.
-        </p>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-12">
+      <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+            Overview
+          </p>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-[2.75rem] sm:leading-tight">
+            Welcome back, {adminName}
+          </h1>
+          <p className="text-base text-muted-foreground">
+            Here&apos;s what&apos;s happening at {schoolName} today.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" className="rounded-xl px-4 py-2.5">
+            This term
+          </Button>
+        </div>
+      </header>
 
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-xl border border-border bg-card p-5"
+            className="group relative overflow-hidden rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/20 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
           >
-            <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-brand/10 text-brand dark:bg-brand/20">
-              <stat.icon className="size-5" />
+            <div className="flex size-10 items-center justify-center rounded-xl bg-brand/10 text-brand transition-transform duration-300 group-hover:scale-105 dark:bg-brand/15">
+              <stat.icon className="size-[18px]" />
             </div>
-            <div className="mt-4">
-              <p className="text-2xl font-semibold tracking-tight">
+            <div className="mt-5 space-y-1">
+              <p className="text-2xl font-semibold tracking-tight text-foreground tabular-nums">
                 {loading ? "…" : stat.value}
               </p>
-              <p className="text-sm text-muted-foreground">{stat.label}</p>
+              <p className="text-[0.8rem] text-muted-foreground">{stat.label}</p>
             </div>
           </div>
         ))}
-      </div>
+      </section>
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="rounded-xl border border-border bg-card p-5 lg:col-span-2">
-          <h3 className="font-medium">Quick Actions</h3>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <section className="grid gap-5 lg:grid-cols-3">
+        <div className="rounded-2xl border border-border bg-card p-6 lg:col-span-2">
+          <div className="space-y-1.5">
+            <h2 className="text-base font-semibold tracking-tight text-foreground">
+              Quick Actions
+            </h2>
+            <p className="text-[0.8rem] text-muted-foreground">
+              Common tasks to keep your school running smoothly.
+            </p>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
             {quickActions.map((action) => (
               <Button
                 key={action.label}
                 variant="outline"
-                className="justify-start gap-3"
+                className="h-auto justify-start gap-3 rounded-xl px-3.5 py-3.5 text-left"
                 onClick={action.onClick}
               >
-                <action.icon className="size-4 text-muted-foreground" />
-                {action.label}
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-brand/10 text-brand dark:bg-brand/15">
+                  <action.icon className="size-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[0.8rem] font-semibold text-foreground">
+                    {action.label}
+                  </span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {action.description}
+                  </span>
+                </span>
               </Button>
             ))}
           </div>
         </div>
 
-        <div className="rounded-xl border border-border bg-card p-5">
-          <h3 className="font-medium">Recent Activity</h3>
-          <p className="mt-4 text-sm text-muted-foreground">
-            Recent activity will appear here.
-          </p>
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <div className="space-y-1.5">
+            <h2 className="text-base font-semibold tracking-tight text-foreground">
+              Recent Activity
+            </h2>
+            <p className="text-[0.8rem] text-muted-foreground">
+              A live feed of recent changes across your school.
+            </p>
+          </div>
+          <div className="mt-6 flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-12 text-center">
+            <div className="flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+              <ClipboardCheckIcon className="size-5" />
+            </div>
+            <p className="mt-4 text-sm font-medium text-foreground">
+              No activity yet
+            </p>
+            <p className="mt-1 max-w-[14rem] text-xs text-muted-foreground">
+              Your recent actions will appear here as they happen.
+            </p>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

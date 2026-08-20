@@ -142,7 +142,11 @@
     @apply border-border transition-[border-color,_box-shadow] duration-300;
   }
   .dark .glow-border {
-    @apply border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.12)];
+    @apply border-white/10;
+  }
+  .dark .glow-border:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.06);
   }
   .brand-ring {
     @apply ring-1 ring-brand/15;
@@ -155,5 +159,25 @@
   }
   .table-header-brand {
     @apply bg-brand/5 dark:bg-brand/10 text-foreground;
+  }
+
+  .select-premium {
+    @apply h-10 w-full rounded-xl border border-border bg-background px-3 pr-8 text-sm text-foreground outline-none transition-colors focus:border-brand/40 focus:ring-3 focus:ring-brand/15;
+  }
+
+  .table-premium {
+    @apply w-full text-[0.8rem];
+  }
+  .table-premium thead th {
+    @apply border-b border-border bg-muted/30 px-6 py-4 text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground;
+  }
+  .table-premium tbody {
+    @apply divide-y divide-border;
+  }
+  .table-premium tbody td {
+    @apply px-6 py-4;
+  }
+  .table-premium tbody tr {
+    @apply transition-colors hover:bg-muted/40;
   }
 }

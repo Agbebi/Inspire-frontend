@@ -43,7 +43,7 @@ function App() {
       enableSystem
       disableTransitionOnChange
     >
-      <main className='flex flex-col p-2 h-svh'>
+      <main className='flex flex-col p-0 h-svh'>
 
         <Routes>
           <Route path="/" element={<HomePage />} />

@@ -119,10 +119,11 @@ export default function Teachers() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">Teachers</h1>
+        <div className="space-y-8">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Staff</p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground">Teachers</h1>
                     <p className="text-sm text-muted-foreground">Manage teachers and the subjects they teach.</p>
                 </div>
                 <Button onClick={openAdd} className="gap-2 w-full sm:w-auto">
@@ -131,51 +132,62 @@ export default function Teachers() {
             </div>
 
             {items.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                    <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-20 text-center">
+                    <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
                         <BookUserIcon className="size-6" />
                     </div>
-                    <h3 className="mt-4 text-sm font-medium">No teachers yet</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Add your first teacher to get started.</p>
+                    <h3 className="mt-5 text-base font-semibold text-foreground">No teachers yet</h3>
+                    <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">Add your first teacher to get started.</p>
                 </div>
             ) : (
-                <div className="rounded-xl border border-border bg-card overflow-x-auto">
-                    <table className="w-full text-sm">
+                <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+                    <table className="table-premium">
                         <thead>
-                            <tr className="table-header-brand border-b border-border bg-muted/50">
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Email</th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Status</th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Subjects</th>
-                                <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
+                            <tr>
+                                <th className="text-left">Name</th>
+                                <th className="text-left">Email</th>
+                                <th className="text-left">Status</th>
+                                <th className="text-left">Subjects</th>
+                                <th className="text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
-                            {items.map((teacher) => (
-                                <tr key={teacher._id} className="transition-colors hover:bg-muted/50">
-                                    <td className="px-4 py-3 font-medium">{teacher.name}</td>
-                                    <td className="px-4 py-3 text-muted-foreground">{teacher.email}</td>
-                                    <td className="px-4 py-3">
-                                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${teacher.isActive ? "bg-green-500/10 text-green-600 dark:text-green-400" : "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"}`}>
-                                            {teacher.isActive ? "Active" : "Inactive"}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-3 text-muted-foreground">{(teacher.assignedSubjects || []).length}</td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <Button variant="ghost" size="icon-sm" onClick={() => openView(teacher)} aria-label="View">
-                                                <EyeIcon className="size-4" />
-                                            </Button>
-                                            <Button variant="ghost" size="icon-sm" onClick={() => openEdit(teacher)} aria-label="Edit">
-                                                <PencilIcon className="size-4" />
-                                            </Button>
-                                            <Button variant="ghost" size="icon-sm" onClick={() => handleDelete(teacher._id)} aria-label="Delete" className="text-destructive hover:text-destructive">
-                                                <TrashIcon className="size-4" />
-                                            </Button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
+                        <tbody>
+                            {items.map((teacher) => {
+                                const initials = (teacher.name || "").split(" ").map((p) => p[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()
+                                return (
+                                    <tr key={teacher._id}>
+                                        <td>
+                                            <div className="flex items-center gap-3">
+                                                <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xs font-semibold text-brand dark:bg-brand/15">
+                                                    {initials}
+                                                </div>
+                                                <span className="font-medium text-foreground">{teacher.name}</span>
+                                            </div>
+                                        </td>
+                                        <td className="text-muted-foreground">{teacher.email}</td>
+                                        <td>
+                                            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[0.7rem] font-medium ${teacher.isActive ? "bg-green-500/10 text-green-600 dark:text-green-400" : "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"}`}>
+                                                <span className={`size-1.5 rounded-full ${teacher.isActive ? "bg-green-500" : "bg-yellow-500"}`} />
+                                                {teacher.isActive ? "Active" : "Inactive"}
+                                            </span>
+                                        </td>
+                                        <td className="text-muted-foreground">{(teacher.assignedSubjects || []).length}</td>
+                                        <td>
+                                            <div className="flex items-center justify-end gap-1">
+                                                <Button variant="ghost" size="icon-sm" onClick={() => openView(teacher)} aria-label="View">
+                                                    <EyeIcon className="size-4" />
+                                                </Button>
+                                                <Button variant="ghost" size="icon-sm" onClick={() => openEdit(teacher)} aria-label="Edit">
+                                                    <PencilIcon className="size-4" />
+                                                </Button>
+                                                <Button variant="ghost" size="icon-sm" onClick={() => handleDelete(teacher._id)} aria-label="Delete" className="text-destructive hover:text-destructive">
+                                                    <TrashIcon className="size-4" />
+                                                </Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                     </table>
                 </div>
@@ -220,28 +232,28 @@ export default function Teachers() {
                                     <p className="text-xs text-muted-foreground">No assignments yet. Add a class &amp; subject pair below.</p>
                                 ) : (
                                     <div className="space-y-2">
-                                        {assignments.map((a, index) => (
-                                            <div key={index} className="flex items-center gap-2">
-                                                <select
-                                                    value={a.classId}
-                                                    onChange={(e) => updateAssignmentRow(index, "classId", e.target.value)}
-                                                    className="h-9 flex-1 rounded-lg border border-border bg-background px-2 text-sm"
-                                                >
-                                                    <option value="">Select class</option>
-                                                    {classes.map((c) => (
-                                                        <option key={c._id} value={c._id}>{c.name}{c.arm ? ` ${c.arm}` : ""}</option>
-                                                    ))}
-                                                </select>
-                                                <select
-                                                    value={a.subjectId}
-                                                    onChange={(e) => updateAssignmentRow(index, "subjectId", e.target.value)}
-                                                    className="h-9 flex-1 rounded-lg border border-border bg-background px-2 text-sm"
-                                                >
-                                                    <option value="">Select subject</option>
-                                                    {subjects.map((s) => (
-                                                        <option key={s._id} value={s._id}>{s.name}</option>
-                                                    ))}
-                                                </select>
+                                {assignments.map((a, index) => (
+                                    <div key={index} className="flex items-center gap-2">
+                                        <select
+                                            value={a.classId}
+                                            onChange={(e) => updateAssignmentRow(index, "classId", e.target.value)}
+                                            className="select-premium flex-1"
+                                        >
+                                            <option value="">Select class</option>
+                                            {classes.map((c) => (
+                                                <option key={c._id} value={c._id}>{c.name}{c.arm ? ` ${c.arm}` : ""}</option>
+                                            ))}
+                                        </select>
+                                        <select
+                                            value={a.subjectId}
+                                            onChange={(e) => updateAssignmentRow(index, "subjectId", e.target.value)}
+                                            className="select-premium flex-1"
+                                        >
+                                            <option value="">Select subject</option>
+                                            {subjects.map((s) => (
+                                                <option key={s._id} value={s._id}>{s.name}</option>
+                                            ))}
+                                        </select>
                                                 <Button type="button" variant="ghost" size="icon-sm" onClick={() => removeAssignmentRow(index)} aria-label="Remove assignment">
                                                     <TrashIcon className="size-4" />
                                                 </Button>
@@ -303,31 +315,31 @@ function TeacherDetails({ teacher, classes, subjects }) {
     }, [teacher.assignedSubjects, classMap, subjectMap])
 
     return (
-        <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-5 text-[0.8rem]">
                 <div>
                     <p className="text-muted-foreground">Name</p>
-                    <p className="font-medium">{teacher.name}</p>
+                    <p className="mt-0.5 font-medium text-foreground">{teacher.name}</p>
                 </div>
                 <div>
                     <p className="text-muted-foreground">Email</p>
-                    <p className="font-medium">{teacher.email}</p>
+                    <p className="mt-0.5 font-medium text-foreground">{teacher.email}</p>
                 </div>
                 <div>
                     <p className="text-muted-foreground">Status</p>
-                    <p className="font-medium capitalize">{teacher.isActive ? "Active" : "Inactive"}</p>
+                    <p className="mt-0.5 font-medium capitalize text-foreground">{teacher.isActive ? "Active" : "Inactive"}</p>
                 </div>
             </div>
 
-            <div className="space-y-2">
-                <p className="text-sm font-medium">Assigned classes &amp; subjects</p>
+            <div className="space-y-3">
+                <p className="text-[0.8rem] font-medium text-foreground">Assigned classes &amp; subjects</p>
                 {assignments.length === 0 ? (
                     <p className="text-sm text-muted-foreground">No assignments yet.</p>
                 ) : (
                     <div className="space-y-2">
                         {assignments.map((a) => (
-                            <div key={`${a.classId}-${a.subjectId}`} className="flex items-center justify-between rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm">
-                                <span className="font-medium">{a.className}{a.classArm ? ` ${a.classArm}` : ""}</span>
+                            <div key={`${a.classId}-${a.subjectId}`} className="flex items-center justify-between rounded-xl border border-border bg-muted/30 px-4 py-2.5 text-[0.8rem]">
+                                <span className="font-medium text-foreground">{a.className}{a.classArm ? ` ${a.classArm}` : ""}</span>
                                 <span className="text-muted-foreground">{a.subjectName}</span>
                             </div>
                         ))}

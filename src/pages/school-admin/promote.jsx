@@ -126,9 +126,10 @@ export default function PromoteStudents() {
     const allSelected = sourceStudents.length > 0 && selectedIds.length === sourceStudents.length
 
     return (
-        <div className="space-y-6">
-            <div className="space-y-1">
-                <h1 className="text-2xl font-semibold tracking-tight">
+        <div className="space-y-8">
+            <div className="space-y-2">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Students</p>
+                <h1 className="text-2xl font-semibold tracking-tight text-foreground">
                     {mode === "promote" ? "Promote Students" : mode === "graduate" ? "Graduate Students" : "Mark Students as Left"}
                 </h1>
                 <p className="text-sm text-muted-foreground">
@@ -140,8 +141,8 @@ export default function PromoteStudents() {
                 </p>
             </div>
 
-            <div className="flex items-center gap-4">
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
+            <div className="flex flex-wrap items-center gap-3">
+                <label className="flex flex-1 items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-[0.8rem] cursor-pointer">
                     <input
                         type="radio"
                         name="mode"
@@ -151,7 +152,7 @@ export default function PromoteStudents() {
                     />
                     Promote
                 </label>
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <label className="flex flex-1 items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-[0.8rem] cursor-pointer">
                     <input
                         type="radio"
                         name="mode"
@@ -162,7 +163,7 @@ export default function PromoteStudents() {
                     <GraduationCapIcon className="size-4" />
                     Graduate
                 </label>
-                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <label className="flex flex-1 items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-[0.8rem] cursor-pointer">
                     <input
                         type="radio"
                         name="mode"
@@ -182,7 +183,7 @@ export default function PromoteStudents() {
                         id="sourceClass"
                         value={sourceClassId}
                         onChange={handleSourceClassChange}
-                        className="h-10 w-full rounded-lg border border-border bg-background px-3 pr-8 text-sm"
+                        className="select-premium"
                     >
                         <option value="">Select class</option>
                         {classNames.map((name) => {
@@ -194,14 +195,14 @@ export default function PromoteStudents() {
                     </select>
                 </div>
                 {mode === "promote" && (
-                    <div className="space-y-2">
-                        <Label htmlFor="destClass">To Class</Label>
-                        <select
-                            id="destClass"
-                            value={destClassId}
-                            onChange={(e) => setDestClassId(e.target.value)}
-                            className="h-10 w-full rounded-lg border border-border bg-background px-3 pr-8 text-sm"
-                        >
+                        <div className="space-y-2">
+                            <Label htmlFor="destClass">To Class</Label>
+                            <select
+                                id="destClass"
+                                value={destClassId}
+                                onChange={(e) => setDestClassId(e.target.value)}
+                                className="select-premium"
+                            >
                             <option value="">Select class</option>
                             {classNames.map((name) => {
                                 const arms = classGroups[name] || []
@@ -215,11 +216,11 @@ export default function PromoteStudents() {
             </div>
 
             {sourceClassId && (
-                <div className="rounded-xl border border-border bg-card">
-                    <div className="flex items-center justify-between border-b border-border px-4 py-3">
+                <div className="overflow-hidden rounded-2xl border border-border bg-card">
+                    <div className="flex items-center justify-between border-b border-border px-6 py-4">
                         <div className="flex items-center gap-2">
                             <UsersIcon className="size-4 text-muted-foreground" />
-                            <span className="text-sm font-medium">
+                            <span className="text-[0.8rem] font-medium text-foreground">
                                 {sourceStudents.length} student{sourceStudents.length !== 1 ? "s" : ""} in selected class
                             </span>
                         </div>
@@ -235,11 +236,11 @@ export default function PromoteStudents() {
                     </div>
 
                     {isLoading ? (
-                        <div className="p-6 text-center text-sm text-muted-foreground">Loading students…</div>
+                        <div className="p-8 text-center text-sm text-muted-foreground">Loading students…</div>
                     ) : sourceStudents.length === 0 ? (
-                        <div className="p-6 text-center text-sm text-muted-foreground">No students found in this class.</div>
+                        <div className="p-8 text-center text-sm text-muted-foreground">No students found in this class.</div>
                     ) : (
-                        <div className="divide-y divide-border max-h-[400px] overflow-y-auto">
+                        <div className="divide-y divide-border max-h-[420px] overflow-y-auto">
                             {sourceStudents.map((student) => {
                                 const isSelected = selectedIds.includes(student._id)
                                 const avg = student.overallAverage
@@ -248,7 +249,7 @@ export default function PromoteStudents() {
                                 return (
                                     <label
                                         key={student._id}
-                                        className={`flex cursor-pointer items-center gap-3 px-4 py-3 transition-colors hover:bg-muted/50 ${isSelected ? "bg-muted/30" : ""}`}
+                                        className={`flex cursor-pointer items-center gap-3 px-6 py-3.5 transition-colors hover:bg-muted/50 ${isSelected ? "bg-muted/30" : ""}`}
                                     >
                                         <input
                                             type="checkbox"
@@ -257,7 +258,7 @@ export default function PromoteStudents() {
                                             className="size-4 rounded border-border"
                                         />
                                         <div className="flex-1">
-                                            <p className="text-sm font-medium">
+                                            <p className="text-[0.8rem] font-medium text-foreground">
                                                 {student.firstName} {student.lastName}
                                             </p>
                                             <p className="text-xs text-muted-foreground">
@@ -266,12 +267,12 @@ export default function PromoteStudents() {
                                         </div>
                                         <div className="flex items-center gap-2">
                                             {avg !== null && (
-                                                <span className={`text-xs font-medium ${hasLowGrade ? "text-red-600" : "text-green-600"}`}>
+                                                <span className={`text-[0.7rem] font-medium ${hasLowGrade ? "text-red-600" : "text-green-600"}`}>
                                                     Avg: {avg}
                                                 </span>
                                             )}
                                             {grade && (
-                                                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${grade === "F" || grade === "D" ? "bg-red-500/10 text-red-600" : "bg-green-500/10 text-green-600"}`}>
+                                                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[0.7rem] font-medium ${grade === "F" || grade === "D" ? "bg-red-500/10 text-red-600" : "bg-green-500/10 text-green-600"}`}>
                                                     {grade}
                                                 </span>
                                             )}
@@ -281,7 +282,7 @@ export default function PromoteStudents() {
                                             {isSelected ? (
                                                 <GraduationCapIcon className="size-4 text-green-600" />
                                             ) : (
-                                                <span className="text-xs text-muted-foreground">Repeating</span>
+                                                <span className="text-[0.7rem] text-muted-foreground">Repeating</span>
                                             )}
                                         </div>
                                     </label>
@@ -292,8 +293,8 @@ export default function PromoteStudents() {
                 </div>
             )}
 
-            <div className="flex items-center justify-between rounded-xl border border-border bg-card p-4">
-                <div className="text-sm text-muted-foreground">
+            <div className="flex items-center justify-between rounded-2xl border border-border bg-card p-6">
+                <div className="text-[0.8rem] text-muted-foreground">
                     {selectedIds.length > 0 ? (
                         <span>{selectedIds.length} student{selectedIds.length !== 1 ? "s" : ""} selected for {mode}</span>
                     ) : (

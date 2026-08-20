@@ -151,10 +151,11 @@ export default function Results() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-2 items-center justify-between">
-                <div className="space-y-1 text-center md:text-left">
-                    <h1 className="text-2xl font-semibold tracking-tight">Results</h1>
+        <div className="space-y-8">
+            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Academic</p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground">Results</h1>
                     <p className="text-sm text-muted-foreground">
                         {view === "classes" && "Select a class to view student results."}
                         {view === "students" && `Students in ${selectedClass?.name}${selectedClass?.arm ? ` ${selectedClass.arm}` : ""}`}
@@ -179,27 +180,29 @@ export default function Results() {
             {view === "classes" && (
                 <>
                     {classes.length === 0 ? (
-                        <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-20 text-center">
+                            <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
                                 <SchoolIcon className="size-6" />
                             </div>
-                            <h3 className="mt-4 text-sm font-medium">No classes yet</h3>
-                            <p className="mt-1 text-sm text-muted-foreground">Create classes first to view results.</p>
+                            <h3 className="mt-5 text-base font-semibold text-foreground">No classes yet</h3>
+                            <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">Create classes first to view results.</p>
                         </div>
                     ) : (
-                        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                             {classes.map((klass) => (
                                 <div
                                     key={klass._id}
-                                    className="rounded-xl border border-border bg-card p-5 cursor-pointer transition-colors hover:bg-muted/50"
+                                    className="group cursor-pointer rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/20 hover:shadow-[0_12px_40px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.35)]"
                                     onClick={() => openClass(klass)}
                                 >
                                     <div className="flex items-center justify-between">
-                                        <div>
-                                            <h3 className="font-medium">{klass.name}{klass.arm ? ` ${klass.arm}` : ""}</h3>
-                                            <p className="text-sm text-muted-foreground">{klass.studentCount || 0} students</p>
+                                        <div className="space-y-1">
+                                            <h3 className="font-medium text-foreground">{klass.name}{klass.arm ? ` ${klass.arm}` : ""}</h3>
+                                            <p className="text-[0.8rem] text-muted-foreground">{klass.studentCount || 0} students</p>
                                         </div>
-                                        <ClipboardCheckIcon className="size-5 text-muted-foreground" />
+                                        <div className="flex size-10 items-center justify-center rounded-xl bg-brand/10 text-brand dark:bg-brand/15">
+                                            <ClipboardCheckIcon className="size-5" />
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -213,35 +216,36 @@ export default function Results() {
                     {loading ? (
                         <PageLoading message="Loading students…" />
                     ) : students.length === 0 ? (
-                        <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-20 text-center">
+                            <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
                                 <UsersIcon className="size-6" />
                             </div>
-                            <h3 className="mt-4 text-sm font-medium">No students in this class</h3>
-                            <p className="mt-1 text-sm text-muted-foreground">Add students to this class to see results.</p>
+                            <h3 className="mt-5 text-base font-semibold text-foreground">No students in this class</h3>
+                            <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">Add students to this class to see results.</p>
                         </div>
                     ) : (
-                        <div className="rounded-xl border border-border bg-card overflow-x-auto">
-                            <table className="w-full text-sm">
+                        <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+                            <table className="table-premium">
                                 <thead>
-                                    <tr className="table-header-brand border-b border-border bg-muted/50">
-                                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
-                                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Admission No.</th>
-                                        <th className="px-4 py-3 text-left font-medium text-muted-foreground">Status</th>
-                                        <th className="px-4 py-3 text-right font-medium text-muted-foreground">Action</th>
+                                    <tr>
+                                        <th className="text-left">Name</th>
+                                        <th className="text-left">Admission No.</th>
+                                        <th className="text-left">Status</th>
+                                        <th className="text-right">Action</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-border">
+                                <tbody>
                                     {students.map((student) => (
-                                        <tr key={student._id} className="transition-colors hover:bg-muted/50 cursor-pointer" onClick={() => openStudent(student)}>
-                                            <td className="px-4 py-3 font-medium">{student.firstName} {student.lastName}</td>
-                                            <td className="px-4 py-3 text-muted-foreground">{student.admissionNumber}</td>
-                                            <td className="px-4 py-3">
-                                                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${student.status === "active" ? "bg-green-500/10 text-green-600" : "bg-yellow-500/10 text-yellow-600"}`}>
+                                        <tr key={student._id} className="cursor-pointer" onClick={() => openStudent(student)}>
+                                            <td className="font-medium text-foreground">{student.firstName} {student.lastName}</td>
+                                            <td className="text-muted-foreground">{student.admissionNumber}</td>
+                                            <td>
+                                                <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[0.7rem] font-medium ${student.status === "active" ? "bg-green-500/10 text-green-600 dark:text-green-400" : "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"}`}>
+                                                    <span className={`size-1.5 rounded-full ${student.status === "active" ? "bg-green-500" : "bg-yellow-500"}`} />
                                                     {student.status || "active"}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3 text-right">
+                                            <td className="text-right">
                                                 <Button variant="ghost" size="sm" className="gap-1.5">
                                                     <ClipboardCheckIcon className="size-4" /> View Results
                                                 </Button>
@@ -260,54 +264,56 @@ export default function Results() {
                     {loading ? (
                         <PageLoading message="Loading results…" />
                     ) : results.length === 0 ? (
-                        <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-20 text-center">
+                            <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
                                 <ClipboardCheckIcon className="size-6" />
                             </div>
-                            <h3 className="mt-4 text-sm font-medium">No results recorded</h3>
-                            <p className="mt-1 text-sm text-muted-foreground">This student has no results yet.</p>
+                            <h3 className="mt-5 text-base font-semibold text-foreground">No results recorded</h3>
+                            <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">This student has no results yet.</p>
                         </div>
                     ) : (
-                        <div className="space-y-6">
+                        <div className="space-y-5">
                             {groupedResults.map((group) => (
-                                <div key={group.classId} className="rounded-xl border border-border bg-card overflow-x-auto">
-                                    <div className="border-b border-border bg-muted/50 px-4 py-3">
-                                        <h3 className="font-medium">{group.className}{group.classArm ? ` ${group.classArm}` : ""}</h3>
+                                <div key={group.classId} className="overflow-hidden rounded-2xl border border-border bg-card">
+                                    <div className="border-b border-border bg-muted/30 px-6 py-4">
+                                        <h3 className="text-sm font-semibold text-foreground">{group.className}{group.classArm ? ` ${group.classArm}` : ""}</h3>
                                     </div>
-                                    <table className="w-full text-sm">
-                                        <thead>
-                                            <tr className="table-header-brand border-b border-border text-left text-muted-foreground">
-                                                <th className="px-4 py-3 font-medium">Subject</th>
-                                                <th className="px-4 py-3 font-medium">CA1</th>
-                                                <th className="px-4 py-3 font-medium">CA2</th>
-                                                {caConfig.caCount === 3 && (
-                                                    <th className="px-4 py-3 font-medium">CA3</th>
-                                                )}
-                                                <th className="px-4 py-3 font-medium">Exam</th>
-                                                <th className="px-4 py-3 font-medium">Total</th>
-                                                <th className="px-4 py-3 font-medium">Grade</th>
-                                                <th className="px-4 py-3 font-medium">Remark</th>
-                                                <th className="px-4 py-3 font-medium">Teacher</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-border">
-                                            {group.subjects.map((r) => (
-                                                <tr key={r._id} className="transition-colors hover:bg-muted/50">
-                                                    <td className="px-4 py-3 font-medium">{r.subjectId?.name || "—"}</td>
-                                                    <td className="px-4 py-3">{r.ca1 ?? "—"}</td>
-                                                    <td className="px-4 py-3">{r.ca2 ?? "—"}</td>
+                                    <div className="overflow-x-auto">
+                                        <table className="table-premium">
+                                            <thead>
+                                                <tr>
+                                                    <th className="text-left">Subject</th>
+                                                    <th className="text-left">CA1</th>
+                                                    <th className="text-left">CA2</th>
                                                     {caConfig.caCount === 3 && (
-                                                        <td className="px-4 py-3">{r.ca3 ?? "—"}</td>
+                                                        <th className="text-left">CA3</th>
                                                     )}
-                                                    <td className="px-4 py-3">{r.exam ?? "—"}</td>
-                                                    <td className="px-4 py-3">{r.total ?? "—"}</td>
-                                                    <td className="px-4 py-3">{r.grade || "—"}</td>
-                                                    <td className="px-4 py-3 text-muted-foreground">{toSentenceCase(r.remark)}</td>
-                                                    <td className="px-4 py-3 text-muted-foreground">{r.teacherId?.name || "—"}</td>
+                                                    <th className="text-left">Exam</th>
+                                                    <th className="text-left">Total</th>
+                                                    <th className="text-left">Grade</th>
+                                                    <th className="text-left">Remark</th>
+                                                    <th className="text-left">Teacher</th>
                                                 </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                {group.subjects.map((r) => (
+                                                    <tr key={r._id}>
+                                                        <td className="font-medium text-foreground">{r.subjectId?.name || "—"}</td>
+                                                        <td className="text-muted-foreground">{r.ca1 ?? "—"}</td>
+                                                        <td className="text-muted-foreground">{r.ca2 ?? "—"}</td>
+                                                        {caConfig.caCount === 3 && (
+                                                            <td className="text-muted-foreground">{r.ca3 ?? "—"}</td>
+                                                        )}
+                                                        <td className="text-muted-foreground">{r.exam ?? "—"}</td>
+                                                        <td className="font-medium text-foreground">{r.total ?? "—"}</td>
+                                                        <td className="text-foreground">{r.grade || "—"}</td>
+                                                        <td className="text-muted-foreground">{toSentenceCase(r.remark)}</td>
+                                                        <td className="text-muted-foreground">{r.teacherId?.name || "—"}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -336,11 +342,11 @@ export default function Results() {
                         {groupedMissing.map((group) => (
                             <div key={group.classId} className="space-y-2">
                                 <h4 className="font-medium text-sm">{group.className}{group.classArm ? ` ${group.classArm}` : ""}</h4>
-                                <div className="space-y-1">
+                                <div className="space-y-1.5">
                                     {group.students.map((m, idx) => (
-                                        <div key={idx} className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-sm">
-                                            <span className="font-medium">{m.studentName}</span>
-                                            <span className="text-xs text-muted-foreground">{m.subjectName}</span>
+                                        <div key={idx} className="flex items-center justify-between rounded-xl border border-border bg-muted/30 px-4 py-2.5 text-[0.8rem]">
+                                            <span className="font-medium text-foreground">{m.studentName}</span>
+                                            <span className="text-muted-foreground">{m.subjectName}</span>
                                         </div>
                                     ))}
                                 </div>

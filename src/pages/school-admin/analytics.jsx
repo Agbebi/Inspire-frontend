@@ -76,10 +76,11 @@ export default function Analytics() {
     }, [cumulative])
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
+        <div className="space-y-8">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Insights</p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground">Analytics</h1>
                     <p className="text-sm text-muted-foreground">
                         {selectedCycle ? `${selectedCycle.session} — ${selectedCycle.term}` : "All terms"} performance overview.
                     </p>
@@ -166,7 +167,7 @@ export default function Analytics() {
                                 {Object.entries(performance.gradeDist).map(([grade, count]) => (
                                     <span
                                         key={grade}
-                                        className={`inline-flex items-center rounded-lg px-3 py-1 text-sm font-bold ${getGradeColor(grade)}`}
+                                        className={`inline-flex items-center rounded-xl px-3 py-1 text-[0.8rem] font-bold ${getGradeColor(grade)}`}
                                     >
                                         {grade}: {count}
                                     </span>
@@ -185,7 +186,7 @@ export default function Analytics() {
                     <select
                         value={classId}
                         onChange={(e) => setClassId(e.target.value)}
-                        className="h-9 rounded-lg border border-border bg-background px-3 pr-8 text-sm"
+                        className="select-premium w-auto"
                     >
                         {classes.map((c) => (
                             <option key={c._id} value={c._id}>{c.name}{c.arm ? ` ${c.arm}` : ""}</option>
@@ -199,25 +200,25 @@ export default function Analytics() {
                         <p className="text-sm text-muted-foreground">No results for this class in the selected term.</p>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="w-full text-sm">
+                            <table className="table-premium">
                                 <thead>
-                                    <tr className="table-header-brand border-b border-border text-left text-muted-foreground">
-                                        <th className="px-3 py-2 font-medium">Position</th>
-                                        <th className="px-3 py-2 font-medium">Student</th>
-                                        <th className="px-3 py-2 font-medium text-right">Total</th>
-                                        <th className="px-3 py-2 font-medium text-right">Average</th>
+                                    <tr>
+                                        <th className="text-left">Position</th>
+                                        <th className="text-left">Student</th>
+                                        <th className="text-right">Total</th>
+                                        <th className="text-right">Average</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-border">
+                                <tbody>
                                     {broadsheet.rows.map((row) => (
-                                        <tr key={row.studentId} className="transition-colors hover:bg-muted/50">
-                                            <td className="px-3 py-2 font-medium">{row.position}</td>
-                                            <td className="px-3 py-2 font-medium">
+                                        <tr key={row.studentId}>
+                                            <td className="font-medium text-foreground">{row.position}</td>
+                                            <td className="font-medium text-foreground">
                                                 {row.lastName} {row.firstName}
                                                 <span className="ml-2 text-xs text-muted-foreground">{row.admissionNumber}</span>
                                             </td>
-                                            <td className="px-3 py-2 text-right">{row.total}</td>
-                                            <td className="px-3 py-2 text-right">{row.average}</td>
+                                            <td className="text-right text-muted-foreground">{row.total}</td>
+                                            <td className="text-right text-muted-foreground">{row.average}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -236,30 +237,30 @@ export default function Analytics() {
                         <p className="text-sm text-muted-foreground">No cumulative data yet.</p>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="w-full text-sm">
+                            <table className="table-premium">
                                 <thead>
-                                    <tr className="table-header-brand border-b border-border text-left text-muted-foreground">
-                                        <th className="px-3 py-2 font-medium">Session</th>
-                                        <th className="px-3 py-2 font-medium">Term</th>
-                                        <th className="px-3 py-2 font-medium text-right">Subjects</th>
-                                        <th className="px-3 py-2 font-medium text-right">Total</th>
-                                        <th className="px-3 py-2 font-medium text-right">Average</th>
+                                    <tr>
+                                        <th className="text-left">Session</th>
+                                        <th className="text-left">Term</th>
+                                        <th className="text-right">Subjects</th>
+                                        <th className="text-right">Total</th>
+                                        <th className="text-right">Average</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-border">
+                                <tbody>
                                     {cumGrades.map((c) => (
-                                        <tr key={c.cycleId} className="transition-colors hover:bg-muted/50">
-                                            <td className="px-3 py-2 font-medium">{c.session}</td>
-                                            <td className="px-3 py-2">{c.term}</td>
-                                            <td className="px-3 py-2 text-right">{c.subjects}</td>
-                                            <td className="px-3 py-2 text-right">{c.total}</td>
-                                            <td className="px-3 py-2 text-right font-medium">{c.average}</td>
+                                        <tr key={c.cycleId}>
+                                            <td className="font-medium text-foreground">{c.session}</td>
+                                            <td className="text-muted-foreground">{c.term}</td>
+                                            <td className="text-right text-muted-foreground">{c.subjects}</td>
+                                            <td className="text-right text-muted-foreground">{c.total}</td>
+                                            <td className="text-right font-medium text-foreground">{c.average}</td>
                                         </tr>
                                     ))}
                                     <tr className="border-t border-border font-semibold">
-                                        <td className="px-3 py-2" colSpan={3}>CGPA</td>
-                                        <td className="px-3 py-2 text-right">{cumulative.grandTotal}</td>
-                                        <td className="px-3 py-2 text-right">{cumulative.cgpa}</td>
+                                        <td className="text-foreground" colSpan={3}>CGPA</td>
+                                        <td className="text-right text-foreground">{cumulative.grandTotal}</td>
+                                        <td className="text-right text-foreground">{cumulative.cgpa}</td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -48,7 +48,7 @@ function SubjectChips({ subjects, field = "code", max = 3 }) {
             {shown.map((name, i) => (
                 <span
                     key={i}
-                    className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground"
+                    className="inline-flex items-center rounded-full bg-brand/10 px-2 py-0.5 text-[0.7rem] font-medium text-brand dark:bg-brand/15"
                 >
                     {name}
                 </span>
@@ -165,10 +165,11 @@ export default function Classes() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">Classes</h1>
+        <div className="space-y-8">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Structure</p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground">Classes</h1>
                     <p className="text-sm text-muted-foreground">Create classes, assign subjects, and view enrolled students.</p>
                 </div>
                 <Button onClick={openAdd} className="gap-2 w-full sm:w-auto">
@@ -177,34 +178,34 @@ export default function Classes() {
             </div>
 
             {items.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                    <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-20 text-center">
+                    <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
                         <SchoolIcon className="size-6" />
                     </div>
-                    <h3 className="mt-4 text-sm font-medium">No classes yet</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Add your first class to get started.</p>
+                    <h3 className="mt-5 text-base font-semibold text-foreground">No classes yet</h3>
+                    <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">Add your first class to get started.</p>
                 </div>
             ) : (
-                <div className="rounded-xl border border-border bg-card overflow-x-auto">
-                    <table className="w-full text-sm">
+                <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+                    <table className="table-premium">
                         <thead>
-                            <tr className="table-header-brand border-b border-border bg-muted/50">
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Class</th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Subjects</th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Students</th>
-                                <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
+                            <tr>
+                                <th className="text-left">Class</th>
+                                <th className="text-left">Subjects</th>
+                                <th className="text-left">Students</th>
+                                <th className="text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
+                        <tbody>
                             {items.map((klass) => (
-                                <tr key={klass._id} className="transition-colors hover:bg-muted/50">
-                                    <td className="px-4 py-3 font-medium">{klass.name}{klass.arm ? ` ${klass.arm}` : ""}</td>
-                                    <td className="px-4 py-3">
+                                <tr key={klass._id}>
+                                    <td className="font-medium text-foreground">{klass.name}{klass.arm ? ` ${klass.arm}` : ""}</td>
+                                    <td>
                                         <SubjectChips subjects={klass.subjects} />
                                     </td>
-                                    <td className="px-4 py-3 text-muted-foreground">{klass.studentCount || 0}</td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center justify-end gap-2">
+                                    <td className="text-muted-foreground">{klass.studentCount || 0}</td>
+                                    <td>
+                                        <div className="flex items-center justify-end gap-1">
                                             <Button variant="ghost" size="sm" onClick={() => openView(klass)} className="gap-1.5">
                                                 <EyeIcon className="size-4" /> View
                                             </Button>
@@ -259,7 +260,7 @@ export default function Classes() {
                         ) : (
                             <div className="grid grid-cols-2 gap-2">
                                 {subjects.map((s) => (
-                                    <label key={s._id} className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm">
+                                    <label key={s._id} className="flex items-center gap-2.5 rounded-xl border border-border bg-background px-3 py-2.5 text-[0.8rem]">
                                         <input
                                             type="checkbox"
                                             checked={formData.subjects.includes(s._id)}
@@ -304,7 +305,7 @@ export default function Classes() {
                 ) : (
                     <div className="grid grid-cols-2 gap-2">
                         {subjects.map((s) => (
-                            <label key={s._id} className="flex items-center gap-2 rounded-lg border border-border bg-background px-3 py-2 text-sm">
+                            <label key={s._id} className="flex items-center gap-2.5 rounded-xl border border-border bg-background px-3 py-2.5 text-[0.8rem]">
                                 <input
                                     type="checkbox"
                                     checked={selectedSubjects.includes(s._id)}

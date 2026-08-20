@@ -71,10 +71,11 @@ export default function Subjects() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">Subjects</h1>
+        <div className="space-y-8">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">Structure</p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground">Subjects</h1>
                     <p className="text-sm text-muted-foreground">Manage the subjects offered by your school.</p>
                 </div>
                 <Button onClick={openAdd} className="gap-2 w-full sm:w-auto">
@@ -83,30 +84,30 @@ export default function Subjects() {
             </div>
 
             {items.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                    <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-20 text-center">
+                    <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
                         <BookOpenIcon className="size-6" />
                     </div>
-                    <h3 className="mt-4 text-sm font-medium">No subjects yet</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">Add your first subject to get started.</p>
+                    <h3 className="mt-5 text-base font-semibold text-foreground">No subjects yet</h3>
+                    <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">Add your first subject to get started.</p>
                 </div>
             ) : (
-                <div className="rounded-xl border border-border bg-card overflow-x-auto">
-                    <table className="w-full text-sm">
+                <div className="overflow-x-auto rounded-2xl border border-border bg-card">
+                    <table className="table-premium">
                         <thead>
-                            <tr className="table-header-brand border-b border-border bg-muted/50">
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Name</th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Code</th>
-                                <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
+                            <tr>
+                                <th className="text-left">Name</th>
+                                <th className="text-left">Code</th>
+                                <th className="text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
+                        <tbody>
                             {items.map((subject) => (
-                                <tr key={subject._id} className="transition-colors hover:bg-muted/50">
-                                    <td className="px-4 py-3 font-medium">{subject.name}</td>
-                                    <td className="px-4 py-3 text-muted-foreground">{subject.code || "—"}</td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center justify-end gap-2">
+                                <tr key={subject._id}>
+                                    <td className="font-medium text-foreground">{subject.name}</td>
+                                    <td className="text-muted-foreground">{subject.code || "—"}</td>
+                                    <td>
+                                        <div className="flex items-center justify-end gap-1">
                                             <Button variant="ghost" size="icon-sm" onClick={() => openEdit(subject)} aria-label="Edit">
                                                 <PencilIcon className="size-4" />
                                             </Button>

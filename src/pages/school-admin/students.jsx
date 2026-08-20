@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "sonner"
-import { PlusIcon, PencilIcon, TrashIcon, SearchIcon, EyeIcon, UsersIcon, ArrowUpIcon, ArrowDownIcon, CopyIcon } from "lucide-react"
+import { PlusIcon, PencilIcon, TrashIcon, SearchIcon, EyeIcon, UsersIcon, ArrowUpIcon, ArrowDownIcon, CopyIcon, UserCheckIcon, GraduationCapIcon, UserMinusIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,6 +28,27 @@ const emptyForm = {
     className: "",
     arm: "",
     status: "active",
+}
+
+const selectClass =
+    "h-10 w-full rounded-xl border border-border bg-background px-3 pr-8 text-sm text-foreground outline-none transition-colors focus:border-brand/40 focus:ring-3 focus:ring-brand/15"
+
+const statusStyles = {
+    active: {
+        icon: UserCheckIcon,
+        label: "Active",
+        className: "bg-green-500/10 text-green-600 dark:text-green-400",
+    },
+    graduated: {
+        icon: GraduationCapIcon,
+        label: "Graduated",
+        className: "bg-brand/10 text-brand dark:bg-brand/15",
+    },
+    left: {
+        icon: UserMinusIcon,
+        label: "Left",
+        className: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+    },
 }
 
 export default function Students() {
@@ -179,34 +200,41 @@ export default function Students() {
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-semibold tracking-tight">Students</h1>
-                    <p className="text-sm text-muted-foreground">Find and manage student records.</p>
+        <div className="space-y-8">
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="space-y-2">
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+                        Directory
+                    </p>
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+                        Students
+                    </h1>
+                    <p className="text-sm text-muted-foreground">
+                        Find and manage every student record in your school.
+                    </p>
                 </div>
                 <Button onClick={openAdd} className="gap-2 w-full sm:w-auto">
                     <PlusIcon className="size-4" /> Add Student
                 </Button>
             </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end">
                 <div className="relative flex-1">
-                    <SearchIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search by name, admission no…"
-                        className="pl-9"
+                        className="h-11 rounded-xl pl-10"
                     />
                 </div>
-                <div className="space-y-1 sm:w-48">
+                <div className="space-y-1.5 sm:w-48">
                     <Label htmlFor="classFilter">Class</Label>
                     <select
                         id="classFilter"
                         value={classFilter}
                         onChange={(e) => setClassFilter(e.target.value)}
-                        className="h-10 w-full rounded-lg border border-border bg-background px-3 pr-8 text-sm"
+                        className={selectClass}
                     >
                         <option value="">All classes</option>
                         {classes.map((c) => (
@@ -214,13 +242,13 @@ export default function Students() {
                         ))}
                     </select>
                 </div>
-                <div className="space-y-1 sm:w-40">
+                <div className="space-y-1.5 sm:w-40">
                     <Label htmlFor="statusFilter">Status</Label>
                     <select
                         id="statusFilter"
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="h-10 w-full rounded-lg border border-border bg-background px-3 pr-8 text-sm"
+                        className={selectClass}
                     >
                         <option value="">All</option>
                         <option value="active">Active</option>
@@ -230,69 +258,93 @@ export default function Students() {
             </div>
 
             {filteredStudents.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                    <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card px-6 py-20 text-center">
+                    <div className="flex size-14 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
                         <UsersIcon className="size-6" />
                     </div>
-                    <h3 className="mt-4 text-sm font-medium">No students found</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                        {search ? "Try a different search term." : "Add your first student to get started."}
+                    <h3 className="mt-5 text-base font-semibold text-foreground">No students found</h3>
+                    <p className="mt-1.5 max-w-sm text-sm text-muted-foreground">
+                        {search ? "Try a different search term or adjust your filters." : "Add your first student to get started."}
                     </p>
                 </div>
             ) : (
-                <div className="rounded-xl border border-border bg-card overflow-x-auto">
-                    <table className="w-full text-sm">
-                        <thead>
-                            <tr className="table-header-brand border-b border-border bg-muted/50">
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("name")}>
-                                    <span className="inline-flex items-center gap-1">Name {sortField === "name" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
-                                </th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("admissionNumber")}>
-                                    <span className="inline-flex items-center gap-1">Admission No. {sortField === "admissionNumber" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
-                                </th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Access PIN</th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("class")}>
-                                    <span className="inline-flex items-center gap-1">Class {sortField === "class" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
-                                </th>
-                                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("status")}>
-                                    <span className="inline-flex items-center gap-1">Status {sortField === "status" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
-                                </th>
-                                <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-border">
-                            {filteredStudents.map((student) => (
-                                <tr key={student._id} className="transition-colors hover:bg-muted/50">
-                                    <td className="px-4 py-3 font-medium">
-                                        {student.firstName} {student.lastName}
-                                    </td>
-                                    <td className="px-4 py-3 text-muted-foreground">{student.admissionNumber}</td>
-                                    <td className="px-4 py-3 text-muted-foreground font-mono">{student.accessPin || "—"}</td>
-                                    <td className="px-4 py-3 text-muted-foreground">
-                                        {student.currentClassId?.name || "—"}{student.currentClassId?.arm ? ` ${student.currentClassId.arm}` : ""}
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${student.status === "active" ? "bg-green-500/10 text-green-600 dark:text-green-400" : "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"}`}>
-                                            {student.status || "active"}
-                                        </span>
-                                    </td>
-                                    <td className="px-4 py-3">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <Button variant="ghost" size="icon-sm" onClick={() => navigate(`/${slug}/admin/students/${student._id}`)} aria-label="View">
-                                                <EyeIcon className="size-4" />
-                                            </Button>
-                                            <Button variant="ghost" size="icon-sm" onClick={() => openEdit(student)} aria-label="Edit">
-                                                <PencilIcon className="size-4" />
-                                            </Button>
-                                            <Button variant="ghost" size="icon-sm" onClick={() => handleDelete(student._id)} aria-label="Delete" className="text-destructive hover:text-destructive">
-                                                <TrashIcon className="size-4" />
-                                            </Button>
-                                        </div>
-                                    </td>
+                <div className="overflow-hidden rounded-2xl border border-border bg-card">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-[0.8rem]">
+                            <thead>
+                                <tr className="border-b border-border bg-muted/30">
+                                    <th className="px-6 py-4 text-left text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("name")}>
+                                        <span className="inline-flex items-center gap-1.5">Name {sortField === "name" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
+                                    </th>
+                                    <th className="px-6 py-4 text-left text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("admissionNumber")}>
+                                        <span className="inline-flex items-center gap-1.5">Admission No. {sortField === "admissionNumber" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
+                                    </th>
+                                    <th className="px-6 py-4 text-left text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Access PIN</th>
+                                    <th className="px-6 py-4 text-left text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("class")}>
+                                        <span className="inline-flex items-center gap-1.5">Class {sortField === "class" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
+                                    </th>
+                                    <th className="px-6 py-4 text-left text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("status")}>
+                                        <span className="inline-flex items-center gap-1.5">Status {sortField === "status" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
+                                    </th>
+                                    <th className="px-6 py-4 text-right text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground">Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody className="divide-y divide-border">
+                                {filteredStudents.map((student) => {
+                                    const initials = `${student.firstName?.[0] || ""}${student.lastName?.[0] || ""}`.toUpperCase()
+                                    return (
+                                        <tr key={student._id} className="transition-colors hover:bg-muted/40">
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand/10 text-xs font-semibold text-brand dark:bg-brand/15">
+                                                        {initials}
+                                                    </div>
+                                                    <div className="min-w-0">
+                                                        <p className="truncate font-medium text-foreground">
+                                                            {student.firstName} {student.lastName}
+                                                        </p>
+                                                        <p className="truncate text-[0.7rem] text-muted-foreground">
+                                                            {student.email || "No email"}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 font-mono text-[0.7rem] text-muted-foreground">{student.admissionNumber}</td>
+                                            <td className="px-6 py-4 font-mono text-[0.7rem] text-muted-foreground">{student.accessPin || "—"}</td>
+                                            <td className="px-6 py-4 text-muted-foreground">
+                                                {student.currentClassId?.name || "—"}{student.currentClassId?.arm ? ` ${student.currentClassId.arm}` : ""}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                {(() => {
+                                                    const s = statusStyles[student.status] || { icon: UsersIcon, label: student.status || "Active", className: "bg-muted text-muted-foreground" }
+                                                    const StatusIcon = s.icon
+                                                    return (
+                                                        <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[0.7rem] font-medium ${s.className}`}>
+                                                            <StatusIcon className="size-3" />
+                                                            {s.label}
+                                                        </span>
+                                                    )
+                                                })()}
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    <Button variant="ghost" size="icon-sm" onClick={() => navigate(`/${slug}/admin/students/${student._id}`)} aria-label="View">
+                                                        <EyeIcon className="size-4" />
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon-sm" onClick={() => openEdit(student)} aria-label="Edit">
+                                                        <PencilIcon className="size-4" />
+                                                    </Button>
+                                                    <Button variant="ghost" size="icon-sm" onClick={() => handleDelete(student._id)} aria-label="Delete" className="text-destructive hover:text-destructive">
+                                                        <TrashIcon className="size-4" />
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             )}
 
@@ -353,7 +405,7 @@ export default function Students() {
                                 id="className"
                                 value={formData.className}
                                 onChange={(e) => setFormData((p) => ({ ...p, className: e.target.value, arm: "" }))}
-                                className="h-10 w-full rounded-lg border border-border bg-background px-3 pr-8 text-sm"
+                                className={selectClass}
                             >
                                 <option value="">Select class</option>
                                 {classNames.map((name) => (
@@ -368,7 +420,7 @@ export default function Students() {
                                 value={formData.arm}
                                 disabled={!formData.className}
                                 onChange={(e) => setFormData((p) => ({ ...p, arm: e.target.value }))}
-                                className="h-10 w-full rounded-lg border border-border bg-background px-3 pr-8 text-sm disabled:opacity-50"
+                                 className={`${selectClass} disabled:opacity-50`}
                             >
                                 <option value="">{formData.className ? "Select arm" : "Pick a class first"}</option>
                                 {armOptions.map((c) => (
