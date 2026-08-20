@@ -8,6 +8,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  base: "./",
   plugins: [
     react(),
     babel({ presets: [reactCompilerPreset()] }),
@@ -17,5 +18,9 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  build: {
+    outDir: "dist",
+    emptyOutDir: true,
   },
 });
