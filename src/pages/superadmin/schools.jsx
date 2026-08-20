@@ -1,4 +1,3 @@
-import * as React from "react"
 import { useState, useEffect } from "react"
 import { PlusIcon, PencilIcon, TrashIcon, SchoolIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom"
@@ -18,21 +17,14 @@ import {
 
 import SchoolFormModal from "@/components/superadmin/school-form-modal"
 
-const emptyForm = {
-  name: "",
-  logoUrl: "",
-  address: "",
-  supportEmail: "",
-}
-
 export default function SuperAdminSchools() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { schools, loading, error, success } = useSelector((state) => state.school)
+  const { schools, loading, error } = useSelector((state) => state.school)
 
-  const [modalOpen, setModalOpen] = React.useState(false)
-  const [editingId, setEditingId] = React.useState(null)
-  const [initialData, setInitialData] = React.useState(null)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [editingId, setEditingId] = useState(null)
+  const [initialData, setInitialData] = useState(null)
 
   useEffect(() => {
     dispatch(getSchools())
@@ -43,14 +35,7 @@ export default function SuperAdminSchools() {
       toast.error(error)
       dispatch(clearSchoolError())
     }
-    if (success) {
-      toast.success(editingId ? "School updated successfully" : "School added successfully")
-      setModalOpen(false)
-      setEditingId(null)
-      setInitialData(null)
-      dispatch(resetSchoolState())
-    }
-  }, [error, success, dispatch, editingId])
+  }, [error, dispatch])
 
   function openAddModal() {
     setEditingId(null)
@@ -79,10 +64,16 @@ export default function SuperAdminSchools() {
     try {
       if (editingId) {
         await dispatch(editSchool({ id: editingId, formData })).unwrap()
+        toast.success("School updated successfully")
       } else {
         await dispatch(registerSchool(formData)).unwrap()
+        toast.success("School added successfully")
       }
-    } catch (err) {
+      setModalOpen(false)
+      setEditingId(null)
+      setInitialData(null)
+      dispatch(resetSchoolState())
+    } catch {
       toast.error(editingId ? "Failed to update school" : "Failed to add school")
     }
   }

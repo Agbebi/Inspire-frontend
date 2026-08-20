@@ -175,13 +175,20 @@ export default function LoginSchool() {
         </Button>
       </form>
 
-      <div className="text-center">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         <Link
           to={slug ? `/${slug}/student/login` : "/auth/school/find"}
           className="inline-flex items-center justify-center gap-2 rounded-lg border border-primary/20 bg-primary/5 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/10"
         >
           <GraduationCapIcon className="size-4" />
           Student? Check your results here
+        </Link>
+        <Link
+          to={slug ? `/${slug}/parent/login` : "/auth/school/find"}
+          className="inline-flex items-center justify-center gap-2 rounded-lg border border-brand/20 bg-brand/5 px-4 py-2 text-sm font-medium text-brand transition-colors hover:bg-brand/10"
+        >
+          <SchoolIcon className="size-4" />
+          Parent? Access your portal
         </Link>
       </div>
 

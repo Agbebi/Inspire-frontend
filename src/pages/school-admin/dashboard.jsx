@@ -7,6 +7,7 @@ import {
   ClipboardCheckIcon,
   UserPlusIcon,
   PlusIcon,
+  BellIcon,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -62,6 +63,7 @@ export default function SchoolAdminDashboard() {
     { icon: PlusIcon, label: "Add Teacher", description: "Invite a staff member", onClick: () => navigate(`/${slug}/admin/teachers`) },
     { icon: BookOpenIcon, label: "Create Class", description: "Set up a new class", onClick: () => navigate(`/${slug}/admin/classes`) },
     { icon: ClipboardCheckIcon, label: "View Results", description: "Review published results", onClick: () => navigate(`/${slug}/admin/results`) },
+    { icon: BellIcon, label: "Notify Parents", description: "Send announcements", onClick: () => navigate(`/${slug}/admin/notifications`) },
   ]
 
   return (

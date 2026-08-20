@@ -1,7 +1,7 @@
 import { Outlet, Link, useParams, useNavigate, useLocation } from "react-router-dom"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { CycleProvider } from "@/components/common/cycle-provider"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {
   MenuIcon,
   XIcon,
@@ -25,19 +25,18 @@ export default function TeacherLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [schoolName, setSchoolName] = useState(slug)
-
-  useEffect(() => {
+  const [schoolName] = useState(() => {
     try {
       const raw = localStorage.getItem("school_auth")
       if (raw) {
         const auth = JSON.parse(raw)
-        setSchoolName(auth?.user?.schoolName || auth?.user?.subDomain || slug)
+        return auth?.user?.schoolName || auth?.user?.subDomain || slug
       }
     } catch {
       // ignore
     }
-  }, [slug])
+    return slug
+  })
 
   function handleLogout() {
     localStorage.removeItem("school_auth")

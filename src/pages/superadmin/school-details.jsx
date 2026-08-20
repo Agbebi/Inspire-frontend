@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom"
-import { ArrowLeftIcon, PencilIcon, TrashIcon, SchoolIcon, MailIcon, GlobeIcon, MapPinIcon, CalendarIcon, UsersIcon, LockIcon, UnlockIcon } from "lucide-react"
+import { ArrowLeftIcon, PencilIcon, TrashIcon, SchoolIcon, MailIcon, GlobeIcon, MapPinIcon, UsersIcon, LockIcon, UnlockIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
@@ -64,7 +64,7 @@ export default function SchoolDetails() {
         await dispatch(removeSchool(id)).unwrap()
         toast.success("School deleted successfully")
         navigate("/superadmin/schools")
-      } catch (err) {
+      } catch {
         toast.error("Failed to delete school")
       }
     }
@@ -75,7 +75,7 @@ export default function SchoolDetails() {
       await dispatch(editSchool({ id, formData })).unwrap()
       toast.success("School updated successfully")
       setModalOpen(false)
-    } catch (err) {
+    } catch {
       toast.error("Failed to update school")
     }
   }

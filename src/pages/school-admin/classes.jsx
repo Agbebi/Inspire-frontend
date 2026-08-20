@@ -62,7 +62,7 @@ function SubjectChips({ subjects, field = "code", max = 3 }) {
 
 export default function Classes() {
     const dispatch = useDispatch()
-    const { items, loading, error, success } = useSelector((state) => state.class)
+    const { items, loading, error } = useSelector((state) => state.class)
     const subjects = useSelector((state) => state.subject.items)
 
     const [modalOpen, setModalOpen] = useState(false)
@@ -81,14 +81,7 @@ export default function Classes() {
 
     useEffect(() => {
         if (error) { toast.error(error); dispatch(clearClassError()) }
-        if (success) {
-            toast.success(editingId ? "Class updated" : "Class added")
-            setModalOpen(false)
-            setEditingId(null)
-            setFormData({ ...emptyForm })
-            dispatch(resetClassSuccess())
-        }
-    }, [error, success, dispatch, editingId])
+    }, [error, dispatch])
 
     function openAdd() {
         setEditingId(null)
@@ -126,9 +119,15 @@ export default function Classes() {
         try {
             if (editingId) {
                 await dispatch(updateClass({ id: editingId, data: formData })).unwrap()
+                toast.success("Class updated")
             } else {
                 await dispatch(addClass(formData)).unwrap()
+                toast.success("Class added")
             }
+            setModalOpen(false)
+            setEditingId(null)
+            setFormData({ ...emptyForm })
+            dispatch(resetClassSuccess())
         } catch {
             toast.error(editingId ? "Failed to update class" : "Failed to add class")
         }

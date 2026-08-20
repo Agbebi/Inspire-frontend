@@ -23,7 +23,6 @@ export default function TeacherResults() {
   const [students, setStudents] = useState([])
   const [submitting, setSubmitting] = useState(false)
   const [caConfig, setCaConfig] = useState({ caCount: 3, caMaxScores: [10, 10, 20], examMaxScore: 70 })
-  const [validationError, setValidationError] = useState("")
 
   const [classFilter, setClassFilter] = useState("")
   const [subjectFilter, setSubjectFilter] = useState("")
@@ -106,7 +105,6 @@ export default function TeacherResults() {
     }
     setEditingId(null)
     setFormData({ studentId: "", classsId: "", subjectId: "", ca1: "", ca2: "", ca3: "", exam: "" })
-    setValidationError("")
     setStudents([])
     loadClasses()
     setModalOpen(true)
@@ -127,7 +125,6 @@ export default function TeacherResults() {
       ca3: result.ca3 ?? "",
       exam: result.exam ?? "",
     })
-    setValidationError("")
     loadClasses().then(() => {
       if (result.classsId?._id) loadStudents(result.classsId._id)
     })

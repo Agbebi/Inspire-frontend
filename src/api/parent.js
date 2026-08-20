@@ -1,22 +1,18 @@
 import axios from "axios";
 
+// const devUrl = "http://localhost:3000/api";
 const devUrl = "https://inspire-backend-3zkb.onrender.com";
-// const devUrl = "http://localhost:3000";
 
-const API = axios.create({
+const parentAPI = axios.create({
   baseURL: devUrl,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Remove default Content-Type for FormData requests
-API.interceptors.request.use((config) => {
-  if (config.data instanceof FormData) {
-    delete config.headers["Content-Type"];
-  }
+parentAPI.interceptors.request.use((config) => {
   try {
-    const raw = localStorage.getItem("school_auth");
+    const raw = localStorage.getItem("parent_auth");
     if (raw) {
       const { token } = JSON.parse(raw);
       if (token) {
@@ -29,4 +25,4 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-export default API;
+export default parentAPI;

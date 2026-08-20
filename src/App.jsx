@@ -21,6 +21,8 @@ import SchoolAdminStudentDetail from "./pages/school-admin/student-detail"
 import SchoolAdminCycles from "./pages/school-admin/cycles"
 import SchoolAdminPromote from "./pages/school-admin/promote"
 import SchoolAdminAnalytics from "./pages/school-admin/analytics"
+import SchoolAdminNotifications from "./pages/school-admin/notifications"
+import SchoolAdminMessages from "./pages/school-admin/messages"
 import SchoolAdminAuthGuard from "./components/common/schooladminauthguard"
 import SuperAdminAuthGuard from "./components/common/requireauth"
 import TeacherAuthGuard from "./components/common/teacherauthguard"
@@ -33,6 +35,15 @@ import StudentResultView from "./pages/student/student-result-view"
 import NotFoundPage from "./pages/not-found-page"
 import UnauthorizedPage from "./pages/unauthorized-page"
 import HomePage from "./pages/home"
+import ParentAuthGuard from "./components/common/parentauthguard"
+import ParentLayout from "./components/auth/parentlayout"
+import ParentLogin from "./pages/parent/login"
+import ParentRegister from "./pages/parent/register"
+import ParentDashboard from "./pages/parent/dashboard"
+import ParentStudentDetail from "./pages/parent/student-detail"
+import ParentNotifications from "./pages/parent/notifications"
+import ParentMessages from "./pages/parent/messages"
+import { ParentAuthProvider } from "./context/parent-auth"
 
 function App() {
 
@@ -43,9 +54,10 @@ function App() {
       enableSystem
       disableTransitionOnChange
     >
-      <main className='flex flex-col p-0 h-svh'>
+      <ParentAuthProvider>
+        <main className='flex flex-col p-0 h-svh'>
 
-        <Routes>
+          <Routes>
           <Route path="/" element={<HomePage />} />
 
           <Route path="/auth/superadmin" element={<SuperAdminAuthGuard />}>
@@ -86,6 +98,8 @@ function App() {
             <Route path="cycles" element={<SchoolAdminCycles />} />
             <Route path="promote" element={<SchoolAdminPromote />} />
             <Route path="analytics" element={<SchoolAdminAnalytics />} />
+            <Route path="notifications" element={<SchoolAdminNotifications />} />
+            <Route path="messages" element={<SchoolAdminMessages />} />
           </Route>
 
           <Route path="/:slug/teacher" element={<TeacherAuthGuard />}>
@@ -101,12 +115,24 @@ function App() {
             <Route path="results" element={<StudentResultView />} />
           </Route>
 
+          <Route path="/:slug/parent/login" element={<ParentLogin />} />
+          <Route path="/:slug/parent/register" element={<ParentRegister />} />
+          <Route path="/:slug/parent" element={<ParentAuthGuard />}>
+            <Route element={<ParentLayout />}>
+              <Route index element={<ParentDashboard />} />
+              <Route path="students/:id" element={<ParentStudentDetail />} />
+              <Route path="notifications" element={<ParentNotifications />} />
+              <Route path="messages" element={<ParentMessages />} />
+            </Route>
+          </Route>
+
           <Route path="/:slug/unauthorized" element={<UnauthorizedPage />} />
           <Route path="*" element={<NotFoundPage />} />
 
 
-        </Routes>
-      </main>
+          </Routes>
+        </main>
+      </ParentAuthProvider>
 
     </ThemeProvider>
   )

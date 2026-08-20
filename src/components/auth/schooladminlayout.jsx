@@ -15,9 +15,12 @@ import {
   SchoolIcon,
   CalendarIcon,
   BarChart3Icon,
+  BellIcon,
+  MessageSquareIcon,
 } from "lucide-react"
 import { toast } from "sonner"
 import { Zhipu } from '@thesvg/react'
+import NotificationDropdown from "@/components/common/notification-dropdown"
 const navGroups = [
   {
     label: "General",
@@ -35,6 +38,13 @@ const navGroups = [
       { icon: ClipboardCheckIcon, label: "Results", href: "/results" },
       { icon: CalendarIcon, label: "Academic Cycles", href: "/cycles" },
       { icon: GraduationCapIcon, label: "Promote Students", href: "/promote" },
+    ],
+  },
+  {
+    label: "Communication",
+    items: [
+      { icon: BellIcon, label: "Notifications", href: "/notifications" },
+      { icon: MessageSquareIcon, label: "Parent Messages", href: "/messages" },
     ],
   },
   {
@@ -189,6 +199,7 @@ export default function SchoolAdminLayout() {
             </span>
           </div>
           <div className="ml-auto flex items-center gap-2">
+            <NotificationDropdown />
             <ThemeToggle />
           </div>
         </header>

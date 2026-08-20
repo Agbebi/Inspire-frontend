@@ -1,5 +1,4 @@
-import React from 'react'
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 
 function CheckAuth({ isAuthenticated, user, children }) {

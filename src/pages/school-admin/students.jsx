@@ -55,7 +55,7 @@ export default function Students() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { slug } = useParams()
-    const { items, loading, error, success } = useSelector((state) => state.student)
+    const { items, loading, error } = useSelector((state) => state.student)
     const classes = useSelector((state) => state.class.items)
 
     const [search, setSearch] = useState("")
@@ -145,14 +145,7 @@ export default function Students() {
 
     useEffect(() => {
         if (error) { toast.error(error); dispatch(clearStudentError()) }
-        if (success) {
-            toast.success(editingId ? "Student updated" : "Student added")
-            setModalOpen(false)
-            setEditingId(null)
-            setFormData({ ...emptyForm })
-            dispatch(resetStudentSuccess())
-        }
-    }, [error, success, dispatch, editingId])
+    }, [error, dispatch])
 
     function openAdd() {
         const randomPin = String(Math.floor(100000 + Math.random() * 900000))
@@ -191,9 +184,15 @@ export default function Students() {
         try {
             if (editingId) {
                 await dispatch(updateStudent({ id: editingId, data: payload })).unwrap()
+                toast.success("Student updated")
             } else {
                 await dispatch(addStudent(payload)).unwrap()
+                toast.success("Student added")
             }
+            setModalOpen(false)
+            setEditingId(null)
+            setFormData({ ...emptyForm })
+            dispatch(resetStudentSuccess())
         } catch {
             toast.error(editingId ? "Failed to update student" : "Failed to add student")
         }

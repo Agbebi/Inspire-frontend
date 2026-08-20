@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useMemo } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { PlusIcon, PencilIcon, TrashIcon, CalendarIcon, EyeIcon, EyeOffIcon, ArrowRightIcon, RefreshCwIcon, LockIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -22,7 +22,7 @@ import { toast } from "sonner"
 
 export default function CycleManagement() {
     const dispatch = useDispatch()
-    const { items, loading, error, success, resultsLocked } = useSelector((state) => state.cycle)
+    const { items, loading, error } = useSelector((state) => state.cycle)
 
     const [modalOpen, setModalOpen] = useState(false)
     const [editingId, setEditingId] = useState(null)
@@ -33,7 +33,6 @@ export default function CycleManagement() {
     const [deletingId, setDeletingId] = useState(null)
     const [newSessionModalOpen, setNewSessionModalOpen] = useState(false)
     const [newSessionForm, setNewSessionForm] = useState({ session: "", startDate: "", endDate: "" })
-    const successRef = useRef(false)
 
     const TERM_ORDER = ['First Term', 'Second Term', 'Third Term']
 
@@ -85,18 +84,6 @@ export default function CycleManagement() {
         }
     }, [error, dispatch])
 
-    useEffect(() => {
-        if (success && !successRef.current) {
-            successRef.current = true
-            toast.success(editingId ? "Cycle updated" : "Cycle added")
-            dispatch(resetCycleSuccess())
-            setModalOpen(false)
-        }
-        if (!success) {
-            successRef.current = false
-        }
-    }, [success, editingId, dispatch])
-
     function openAdd() {
         setEditingId(null)
         setFormData({ session: "", term: "", startDate: "", endDate: "", isCurrent: false })
@@ -125,12 +112,23 @@ export default function CycleManagement() {
             endDate: formData.endDate || undefined,
             isCurrent: formData.isCurrent,
         }
-        if (editingId) {
-            await dispatch(updateCycle({ id: editingId, data: payload }))
-        } else {
-            await dispatch(addCycle(payload))
+        try {
+            if (editingId) {
+                await dispatch(updateCycle({ id: editingId, data: payload })).unwrap()
+                toast.success("Cycle updated")
+            } else {
+                await dispatch(addCycle(payload)).unwrap()
+                toast.success("Cycle added")
+            }
+            setModalOpen(false)
+            setEditingId(null)
+            setFormData({ session: "", term: "", startDate: "", endDate: "", isCurrent: false })
+            dispatch(resetCycleSuccess())
+        } catch {
+            toast.error(editingId ? "Failed to update cycle" : "Failed to add cycle")
+        } finally {
+            setSubmitting(false)
         }
-        setSubmitting(false)
     }
 
     async function handleDelete(id) {

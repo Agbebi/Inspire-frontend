@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useRef } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import { SearchIcon, SchoolIcon, Loader2Icon, ChevronRightIcon, HomeIcon, ArrowLeftIcon } from "lucide-react"
+import { SearchIcon, SchoolIcon, Loader2Icon, ChevronRightIcon, ArrowLeftIcon } from "lucide-react"
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"

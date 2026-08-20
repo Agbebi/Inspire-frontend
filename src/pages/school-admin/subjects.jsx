@@ -20,7 +20,7 @@ const emptyForm = { name: "", code: "" }
 
 export default function Subjects() {
     const dispatch = useDispatch()
-    const { items, loading, error, success } = useSelector((state) => state.subject)
+    const { items, loading, error } = useSelector((state) => state.subject)
 
     const [modalOpen, setModalOpen] = useState(false)
     const [editingId, setEditingId] = useState(null)
@@ -30,15 +30,7 @@ export default function Subjects() {
 
     useEffect(() => {
         if (error) { toast.error(error); dispatch(clearSubjectError()) }
-        if (success) {
-            toast.success(editingId ? "Subject updated" : "Subject added")
-            setModalOpen(false)
-            setEditingId(null)
-            setFormData({ ...emptyForm })
-            dispatch(resetSubjectSuccess())
-        }
-    }, [error, success, dispatch, editingId])
-
+  }, [error, dispatch])
     function openAdd() {
         setEditingId(null)
         setFormData({ ...emptyForm })
@@ -62,9 +54,15 @@ export default function Subjects() {
         try {
             if (editingId) {
                 await dispatch(updateSubject({ id: editingId, data: formData })).unwrap()
+                toast.success("Subject updated")
             } else {
                 await dispatch(addSubject(formData)).unwrap()
+                toast.success("Subject added")
             }
+            setModalOpen(false)
+            setEditingId(null)
+            setFormData({ ...emptyForm })
+            dispatch(resetSubjectSuccess())
         } catch {
             toast.error(editingId ? "Failed to update subject" : "Failed to add subject")
         }

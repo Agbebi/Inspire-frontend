@@ -22,7 +22,7 @@ const emptyForm = { name: "", email: "", password: "" }
 
 export default function Teachers() {
     const dispatch = useDispatch()
-    const { items, loading, error, success } = useSelector((state) => state.teacher)
+    const { items, loading, error } = useSelector((state) => state.teacher)
     const classes = useSelector((state) => state.class.items)
     const subjects = useSelector((state) => state.subject.items)
 
@@ -42,15 +42,7 @@ export default function Teachers() {
 
     useEffect(() => {
         if (error) { toast.error(error); dispatch(clearTeacherError()) }
-        if (success) {
-            toast.success(editingId ? "Teacher updated" : "Teacher added")
-            setModalOpen(false)
-            setEditingId(null)
-            setFormData({ ...emptyForm })
-            setAssignments([])
-            dispatch(resetTeacherSuccess())
-        }
-    }, [error, success, dispatch, editingId])
+    }, [error, dispatch])
 
     function openAdd() {
         setEditingId(null)
@@ -110,9 +102,16 @@ export default function Teachers() {
         try {
             if (editingId) {
                 await dispatch(updateTeacher({ id: editingId, data: payload })).unwrap()
+                toast.success("Teacher updated")
             } else {
                 await dispatch(addTeacher(payload)).unwrap()
+                toast.success("Teacher added")
             }
+            setModalOpen(false)
+            setEditingId(null)
+            setFormData({ ...emptyForm })
+            setAssignments([])
+            dispatch(resetTeacherSuccess())
         } catch {
             toast.error(editingId ? "Failed to update teacher" : "Failed to add teacher")
         }

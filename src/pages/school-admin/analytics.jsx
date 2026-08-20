@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { PageLoading } from "@/components/ui/loading"
 import CycleSelector from "@/components/common/cycle-selector"
 import { useCycle } from "@/components/common/use-cycle"
+import SubjectDoughnut from "@/components/common/subject-doughnut"
 import API from "@/api/axios"
 import { toast } from "sonner"
 
@@ -135,20 +136,9 @@ export default function Analytics() {
                         {!performance || performance.subjectAverages.length === 0 ? (
                             <p className="text-sm text-muted-foreground">No data for this term yet.</p>
                         ) : (
-                            <div className="space-y-2">
+                            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                                 {performance.subjectAverages.map((s) => (
-                                    <div key={s.name} className="space-y-1">
-                                        <div className="flex items-center justify-between text-sm">
-                                            <span className="font-medium">{s.name}</span>
-                                            <span className="text-muted-foreground">{s.average}</span>
-                                        </div>
-                                        <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-                                            <div
-                                                className="h-full rounded-full bg-brand"
-                                                style={{ width: `${Math.min((s.average / 100) * 100, 100)}%` }}
-                                            />
-                                        </div>
-                                    </div>
+                                    <SubjectDoughnut key={s.name} name={s.name} average={s.average} />
                                 ))}
                             </div>
                         )}
@@ -179,14 +169,14 @@ export default function Analytics() {
             </div>
 
             <Card>
-                <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
+                <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <CardTitle className="text-base flex items-center gap-2">
                         <FileSpreadsheetIcon className="size-4" /> Class Broadsheet
                     </CardTitle>
                     <select
                         value={classId}
                         onChange={(e) => setClassId(e.target.value)}
-                        className="select-premium w-auto"
+                        className="select-premium w-full max-w-sm text-xs sm:w-56"
                     >
                         {classes.map((c) => (
                             <option key={c._id} value={c._id}>{c.name}{c.arm ? ` ${c.arm}` : ""}</option>

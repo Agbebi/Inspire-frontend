@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import * as React from "react"
 import { XIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
