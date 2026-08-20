@@ -12,7 +12,8 @@ import API from "@/api/axios"
 import { toast } from "sonner"
 import { io } from "socket.io-client"
 
-const SOCKET_URL = "http://localhost:3000"
+// const SOCKET_URL = "http://localhost:3000"
+const SOCKET_URL = "https://inspire-backend-3zkb.onrender.com"
 
 export default function SchoolAdminMessages() {
   const [searchParams] = useSearchParams()

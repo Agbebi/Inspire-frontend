@@ -7,6 +7,7 @@ import parentAPI from "@/api/parent"
 const SocketContext = createContext(null)
 
 const SOCKET_URL = "https://inspire-backend-3zkb.onrender.com"
+// const SOCKET_URL = "http://localhost:3000"
 
 export function SocketProvider({ children }) {
   const { parentAuth } = useParentAuth()
