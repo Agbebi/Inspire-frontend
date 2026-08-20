@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const devUrl = "http://localhost:3000/api";
-const devUrl = "https://inspire-backend-3zkb.onrender.com";
+const devUrl = "https://inspire-backend-3zkb.onrender.com/api";
 
 const parentAPI = axios.create({
   baseURL: devUrl,
