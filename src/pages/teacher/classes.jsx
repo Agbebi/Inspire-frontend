@@ -48,38 +48,45 @@ export default function TeacherClasses() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">My Classes</h1>
-        <p className="text-sm text-muted-foreground">Classes assigned to you and their students.</p>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-12">
+      <header className="space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+          Classes
+        </p>
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-[2.75rem] sm:leading-tight">
+          My Classes
+        </h1>
+        <p className="text-base text-muted-foreground">
+          Classes assigned to you and their students.
+        </p>
+      </header>
 
       {loading ? (
         <PageLoading message="Loading classes…" />
       ) : classes.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border p-8 text-center">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-border p-12 text-center">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-brand/10 text-brand dark:bg-brand/15">
             <BookOpenIcon className="size-6" />
           </div>
-          <h3 className="mt-4 text-sm font-medium">No classes assigned</h3>
+          <h3 className="mt-4 text-sm font-medium text-foreground">No classes assigned</h3>
           <p className="mt-1 text-sm text-muted-foreground">Contact an admin to get classes assigned to you.</p>
         </div>
       ) : (
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="overflow-hidden rounded-2xl border border-border bg-card">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border bg-muted/50">
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Class</th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Students</th>
-                <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
+              <tr className="border-b border-border bg-muted/40">
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">Class</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">Students</th>
+                <th className="px-5 py-3.5 text-right text-xs font-medium uppercase tracking-wide text-muted-foreground">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {classes.map((klass) => (
-                <tr key={klass._id} className="transition-colors hover:bg-muted/50">
-                  <td className="px-4 py-3 font-medium">{klass.name}{klass.arm ? ` ${klass.arm}` : ""}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{klass.studentCount || 0}</td>
-                  <td className="px-4 py-3">
+                <tr key={klass._id} className="transition-colors hover:bg-muted/40">
+                  <td className="px-5 py-4 font-medium text-foreground">{klass.name}{klass.arm ? ` ${klass.arm}` : ""}</td>
+                  <td className="px-5 py-4 text-muted-foreground tabular-nums">{klass.studentCount || 0}</td>
+                  <td className="px-5 py-4">
                     <div className="flex items-center justify-end gap-2">
                       <Button variant="ghost" size="sm" onClick={() => openStudents(klass)} className="gap-1.5">
                         <UsersIcon className="size-4" /> Students
@@ -106,14 +113,14 @@ export default function TeacherClasses() {
         ) : students.length === 0 ? (
           <p className="text-sm text-muted-foreground">No students found in this class.</p>
         ) : (
-          <div className="max-h-96 space-y-2 overflow-y-auto">
+          <div className="max-h-96 space-y-2.5 overflow-y-auto">
             {students.map((student) => (
-              <div key={student._id} className="flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-sm">
+              <div key={student._id} className="flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3 text-sm">
                 <div>
-                  <p className="font-medium">{student.firstName} {student.lastName}</p>
+                  <p className="font-medium text-foreground">{student.firstName} {student.lastName}</p>
                   <p className="text-xs text-muted-foreground">{student.admissionNumber}</p>
                 </div>
-                <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${student.status === "active" ? "bg-green-500/10 text-green-600" : "bg-yellow-500/10 text-yellow-600"}`}>
+                <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${student.status === "active" ? "bg-green-500/10 text-green-600" : "bg-yellow-500/10 text-yellow-600"}`}>
                   {student.status || "active"}
                 </span>
               </div>

@@ -113,8 +113,8 @@ export default function ParentStudentDetail() {
         {results.length === 0 ? (
           <p className="mt-6 text-sm text-muted-foreground">No results recorded yet.</p>
         ) : (
-          <div className="mt-6 overflow-hidden rounded-xl border border-border">
-            <table className="table-premium">
+          <div className="mt-6 overflow-x-auto rounded-xl border border-border">
+            <table className="table-premium min-w-[640px] whitespace-nowrap">
               <thead>
                 <tr>
                   <th className="text-left">Subject</th>
@@ -178,8 +178,8 @@ export default function ParentStudentDetail() {
                 {report.summary?.position ? `Position ${report.summary.position}/${report.summary.classSize}` : ""} · Avg {report.summary?.average ?? "—"}%
               </span>
             </div>
-            <div className="overflow-hidden rounded-xl border border-border">
-              <table className="table-premium">
+            <div className="overflow-x-auto rounded-xl border border-border">
+              <table className="table-premium min-w-[640px] whitespace-nowrap">
                 <thead>
                   <tr>
                     <th className="text-left">Subject</th>

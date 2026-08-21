@@ -304,42 +304,50 @@ export default function TeacherResults() {
   const resultsRemaining = Math.max(totalPossibleResults - resultsDone, 0)
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">Results</h1>
-          <p className="text-sm text-muted-foreground">Manage results for your classes.</p>
+    <div className="mx-auto max-w-7xl space-y-12">
+      <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div className="space-y-2">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
+            Results
+          </p>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-[2.75rem] sm:leading-tight">
+            Manage Results
+          </h1>
+          <p className="text-base text-muted-foreground">Record and review results for your classes.</p>
         </div>
-        <div className="flex items-center flex-col sm:flex-row gap-2">
+        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center">
           <CycleSelector />
-          <Button onClick={openAdd} className="gap-2 w-full sm:w-auto" disabled={isPublished || !selectedCycleId}>
+          <Button onClick={openAdd} className="gap-2" disabled={isPublished || !selectedCycleId}>
             <PlusIcon className="size-4" /> Add Result
           </Button>
-          {isPublished && (
-            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <LockIcon className="size-3.5" /> Published — editing locked
-            </span>
-          )}
-          {!selectedCycleId && !isPublished && (
-            <span className="text-xs text-muted-foreground">Select a cycle first</span>
-          )}
         </div>
-      </div>
+      </header>
 
-      <div className="grid gap-4 grid-cols-2">
-        <div className="rounded-xl border border-border bg-card p-4">
-          <p className="text-sm font-medium text-muted-foreground">Results Done</p>
-          <p className="text-2xl font-bold">{resultsDone}</p>
+      {isPublished && (
+        <div className="flex items-center gap-2 rounded-xl border border-border bg-muted/40 px-4 py-3 text-xs text-muted-foreground">
+          <LockIcon className="size-3.5 text-brand" /> Published — editing locked
         </div>
-        <div className="rounded-xl border border-border bg-card p-4">
-          <p className="text-sm font-medium text-muted-foreground">Results Remaining</p>
-          <p className="text-2xl font-bold">{resultsRemaining}</p>
+      )}
+      {!selectedCycleId && !isPublished && (
+        <div className="rounded-xl border border-dashed border-border px-4 py-3 text-xs text-muted-foreground">
+          Select a cycle first to manage results.
         </div>
-      </div>
+      )}
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+      <section className="grid gap-5 sm:grid-cols-2">
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <p className="text-[0.8rem] font-medium uppercase tracking-wide text-muted-foreground">Results Done</p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground tabular-nums">{resultsDone}</p>
+        </div>
+        <div className="rounded-2xl border border-border bg-card p-6">
+          <p className="text-[0.8rem] font-medium uppercase tracking-wide text-muted-foreground">Results Remaining</p>
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-foreground tabular-nums">{resultsRemaining}</p>
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-4 sm:flex-row sm:items-end">
         <div className="space-y-1.5 flex-1">
-          <Label htmlFor="search">Search student</Label>
+          <Label htmlFor="search" className="text-xs">Search student</Label>
           <Input
             id="search"
             value={searchQuery}
@@ -348,7 +356,7 @@ export default function TeacherResults() {
           />
         </div>
         <div className="space-y-1.5 sm:w-48">
-          <Label htmlFor="classFilter">Class</Label>
+          <Label htmlFor="classFilter" className="text-xs">Class</Label>
           <select
             id="classFilter"
             value={classFilter}
@@ -362,7 +370,7 @@ export default function TeacherResults() {
           </select>
         </div>
         <div className="space-y-1.5 sm:w-48">
-          <Label htmlFor="subjectFilter">Subject</Label>
+          <Label htmlFor="subjectFilter" className="text-xs">Subject</Label>
           <select
             id="subjectFilter"
             value={subjectFilter}
@@ -375,76 +383,76 @@ export default function TeacherResults() {
             ))}
           </select>
         </div>
-      </div>
+      </section>
 
       {loading ? (
         <PageLoading message="Loading results…" />
       ) : filteredResults.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-border p-8 text-center">
-          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+        <div className="rounded-2xl border border-dashed border-border p-12 text-center">
+          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-brand/10 text-brand dark:bg-brand/15">
             <ClipboardCheckIcon className="size-6" />
           </div>
-          <h3 className="mt-4 text-sm font-medium">No results found</h3>
+          <h3 className="mt-4 text-sm font-medium text-foreground">No results found</h3>
           <p className="mt-1 text-sm text-muted-foreground">{resultsRemaining > 0 ? `${resultsRemaining} results still to record.` : "Try adjusting your filters or add a new result."}</p>
         </div>
       ) : (
-        <div className="rounded-xl border border-border bg-card overflow-x-auto">
+        <div className="overflow-x-auto rounded-2xl border border-border bg-card">
           <table className="w-full text-sm">
             <thead>
-              <tr className="table-header-brand border-b border-border bg-muted/50">
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("student")}>
+              <tr className="border-b border-border bg-muted/40">
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("student")}>
                   <span className="inline-flex items-center gap-1">Student {sortField === "student" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("class")}>
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("class")}>
                   <span className="inline-flex items-center gap-1">Class {sortField === "class" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("subject")}>
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("subject")}>
                   <span className="inline-flex items-center gap-1">Subject {sortField === "subject" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">CA1</th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">CA2</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">CA1</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">CA2</th>
                 {caConfig.caCount === 3 && (
-                  <th className="px-4 py-3 text-left font-medium text-muted-foreground">CA3</th>
+                  <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">CA3</th>
                 )}
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground">Exam</th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("total")}>
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground">Exam</th>
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("total")}>
                   <span className="inline-flex items-center gap-1">Total {sortField === "total" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
                 </th>
-                <th className="px-4 py-3 text-left font-medium text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("grade")}>
+                <th className="px-5 py-3.5 text-left text-xs font-medium uppercase tracking-wide text-muted-foreground cursor-pointer select-none" onClick={() => handleSort("grade")}>
                   <span className="inline-flex items-center gap-1">Grade {sortField === "grade" && (sortDir === "asc" ? <ArrowUpIcon className="size-3.5" /> : <ArrowDownIcon className="size-3.5" />)}</span>
                 </th>
-                <th className="px-4 py-3 text-right font-medium text-muted-foreground">Actions</th>
+                <th className="px-5 py-3.5 text-right text-xs font-medium uppercase tracking-wide text-muted-foreground">Actions</th>
               </tr>
             </thead>
-              <tbody className="divide-y divide-border">
-                {filteredResults.map((r) => (
-                  <tr key={r._id} className="transition-colors hover:bg-muted/50">
-                    <td className="px-4 py-3 font-medium">
-                      {r.studentId ? `${r.studentId.firstName} ${r.studentId.lastName}` : "—"}
-                    </td>
-                    <td className="px-4 py-3 text-muted-foreground">{r.classsId?.name || "—"}{r.classsId?.arm ? ` ${r.classsId.arm}` : ""}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{r.subjectId?.name || "—"}</td>
-                    <td className="px-4 py-3">{r.ca1 ?? "—"}</td>
-                    <td className="px-4 py-3">{r.ca2 ?? "—"}</td>
-                    {caConfig.caCount === 3 && (
-                      <td className="px-4 py-3">{r.ca3 ?? "—"}</td>
-                    )}
-                    <td className="px-4 py-3">{r.exam ?? "—"}</td>
-                    <td className="px-4 py-3">{r.total ?? "—"}</td>
-                    <td className="px-4 py-3">{r.grade || "—"}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon-sm" onClick={() => openEdit(r)} aria-label="Edit" disabled={isPublished || r.cycleId?.isPublished}>
-                          <PencilIcon className="size-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon-sm" onClick={() => handleDelete(r._id, r.cycleId?.isPublished)} aria-label="Delete" className="text-destructive hover:text-destructive" disabled={isPublished || r.cycleId?.isPublished}>
-                          <TrashIcon className="size-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+            <tbody className="divide-y divide-border">
+              {filteredResults.map((r) => (
+                <tr key={r._id} className="transition-colors hover:bg-muted/40">
+                  <td className="px-5 py-4 font-medium text-foreground">
+                    {r.studentId ? `${r.studentId.firstName} ${r.studentId.lastName}` : "—"}
+                  </td>
+                  <td className="px-5 py-4 text-muted-foreground">{r.classsId?.name || "—"}{r.classsId?.arm ? ` ${r.classsId.arm}` : ""}</td>
+                  <td className="px-5 py-4 text-muted-foreground">{r.subjectId?.name || "—"}</td>
+                  <td className="px-5 py-4 tabular-nums">{r.ca1 ?? "—"}</td>
+                  <td className="px-5 py-4 tabular-nums">{r.ca2 ?? "—"}</td>
+                  {caConfig.caCount === 3 && (
+                    <td className="px-5 py-4 tabular-nums">{r.ca3 ?? "—"}</td>
+                  )}
+                  <td className="px-5 py-4 tabular-nums">{r.exam ?? "—"}</td>
+                  <td className="px-5 py-4 tabular-nums font-medium text-foreground">{r.total ?? "—"}</td>
+                  <td className="px-5 py-4 text-muted-foreground">{r.grade || "—"}</td>
+                  <td className="px-5 py-4">
+                    <div className="flex items-center justify-end gap-1">
+                      <Button variant="ghost" size="icon-sm" onClick={() => openEdit(r)} aria-label="Edit" disabled={isPublished || r.cycleId?.isPublished}>
+                        <PencilIcon className="size-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon-sm" onClick={() => handleDelete(r._id, r.cycleId?.isPublished)} aria-label="Delete" className="text-destructive hover:text-destructive" disabled={isPublished || r.cycleId?.isPublished}>
+                        <TrashIcon className="size-4" />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       )}
@@ -465,7 +473,7 @@ export default function TeacherResults() {
       >
         <form id="result-form" onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="classsId">Class</Label>
+            <Label htmlFor="classsId" className="text-xs">Class</Label>
             <select
               id="classsId"
               value={formData.classsId}
@@ -481,7 +489,7 @@ export default function TeacherResults() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="subjectId">Subject</Label>
+            <Label htmlFor="subjectId" className="text-xs">Subject</Label>
             <select
               id="subjectId"
               value={formData.subjectId}
@@ -498,7 +506,7 @@ export default function TeacherResults() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="studentId">Student</Label>
+            <Label htmlFor="studentId" className="text-xs">Student</Label>
             <select
               id="studentId"
               value={formData.studentId}
@@ -518,21 +526,21 @@ export default function TeacherResults() {
 
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="ca1">CA1</Label>
+              <Label htmlFor="ca1" className="text-xs">CA1</Label>
               <Input id="ca1" type="number" value={formData.ca1} onChange={(e) => setFormData((p) => ({ ...p, ca1: e.target.value }))} placeholder="0" max={caConfig.caMaxScores[0]} min={0} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="ca2">CA2</Label>
+              <Label htmlFor="ca2" className="text-xs">CA2</Label>
               <Input id="ca2" type="number" value={formData.ca2} onChange={(e) => setFormData((p) => ({ ...p, ca2: e.target.value }))} placeholder="0" max={caConfig.caMaxScores[1]} min={0} />
             </div>
             {caConfig.caCount === 3 && (
               <div className="space-y-2">
-                <Label htmlFor="ca3">CA3</Label>
+                <Label htmlFor="ca3" className="text-xs">CA3</Label>
                 <Input id="ca3" type="number" value={formData.ca3} onChange={(e) => setFormData((p) => ({ ...p, ca3: e.target.value }))} placeholder="0" max={caConfig.caMaxScores[2] || 20} min={0} />
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="exam">Exam</Label>
+              <Label htmlFor="exam" className="text-xs">Exam</Label>
               <Input id="exam" type="number" value={formData.exam} onChange={(e) => setFormData((p) => ({ ...p, exam: e.target.value }))} placeholder="0" max={caConfig.examMaxScore} min={0} />
             </div>
           </div>
