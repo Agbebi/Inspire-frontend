@@ -25,6 +25,10 @@ const emptyForm = {
     email: "",
     accessPin: "",
     admissionNumber: "",
+    gender: "",
+    dateOfBirth: "",
+    address: "",
+    likes: "",
     className: "",
     arm: "",
     status: "active",
@@ -164,6 +168,10 @@ export default function Students() {
             email: student.email || "",
             accessPin: student.accessPin || "",
             admissionNumber: student.admissionNumber || "",
+            gender: student.gender || "",
+            dateOfBirth: student.dateOfBirth ? String(student.dateOfBirth).slice(0, 10) : "",
+            address: student.address || "",
+            likes: student.likes || "",
             className: classObj?.name || "",
             arm: classObj?.arm || "",
             status: student.status || "active",
@@ -351,6 +359,7 @@ export default function Students() {
                 open={modalOpen}
                 onClose={() => { setModalOpen(false); setEditingId(null); setFormData({ ...emptyForm }) }}
                 title={editingId ? "Edit Student" : "Add Student"}
+                maxWidth="max-w-2xl"
                 footer={
                     <>
                         <Button type="button" variant="outline" onClick={() => { setModalOpen(false); setEditingId(null); setFormData({ ...emptyForm }) }}>
@@ -362,7 +371,7 @@ export default function Students() {
                     </>
                 }
             >
-                <form id="student-form" onSubmit={handleSubmit} className="space-y-4">
+                <form id="student-form" onSubmit={handleSubmit} className="space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">
                             <Label htmlFor="firstName">First name</Label>
@@ -396,6 +405,49 @@ export default function Students() {
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>
                         <Input id="email" type="email" value={formData.email} onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))} />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                            <Label htmlFor="gender">Gender</Label>
+                            <select
+                                id="gender"
+                                value={formData.gender}
+                                onChange={(e) => setFormData((p) => ({ ...p, gender: e.target.value }))}
+                                className={selectClass}
+                            >
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="dateOfBirth">Date of birth</Label>
+                            <Input id="dateOfBirth" type="date" value={formData.dateOfBirth} onChange={(e) => setFormData((p) => ({ ...p, dateOfBirth: e.target.value }))} />
+                        </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground -mt-1">Age is calculated automatically from the date of birth.</p>
+                    <div className="space-y-2">
+                        <Label htmlFor="address">Address</Label>
+                        <textarea
+                            id="address"
+                            rows={2}
+                            value={formData.address}
+                            onChange={(e) => setFormData((p) => ({ ...p, address: e.target.value }))}
+                            placeholder="Home address"
+                            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-brand/40 focus:ring-3 focus:ring-brand/15"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="likes">Likes / Interests</Label>
+                        <textarea
+                            id="likes"
+                            rows={2}
+                            value={formData.likes}
+                            onChange={(e) => setFormData((p) => ({ ...p, likes: e.target.value }))}
+                            placeholder="Hobbies, interests, favorite activities…"
+                            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground outline-none transition-colors placeholder:text-muted-foreground focus:border-brand/40 focus:ring-3 focus:ring-brand/15"
+                        />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-2">

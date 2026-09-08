@@ -4,11 +4,12 @@ import { useParentAuth } from "@/context/parent-auth"
 import { useSocket } from "@/context/socket"
 import { useState } from "react"
 import {
-  MenuIcon,
+  PanelLeftIcon,
   XIcon,
   LayoutDashboardIcon,
   BellIcon,
   MessageSquareIcon,
+  CreditCardIcon,
   LogOutIcon,
   GraduationCapIcon,
 } from "lucide-react"
@@ -19,7 +20,8 @@ import ParentNotificationDropdown from "@/components/common/parent-notification-
 const navItems = [
   { icon: LayoutDashboardIcon, label: "Dashboard", href: "" },
   { icon: BellIcon, label: "Notifications", href: "/notifications", badge: "unread" },
-  { icon: MessageSquareIcon, label: "Messages", href: "/messages" },
+  { icon: MessageSquareIcon, label: "Messages", href: "/messages", badge: "unreadMessages" },
+  { icon: CreditCardIcon, label: "Fees", href: "/fees" },
 ]
 
 export default function ParentLayout() {
@@ -27,7 +29,7 @@ export default function ParentLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const { parentAuth, logout } = useParentAuth()
-  const { unreadCount } = useSocket()
+  const { unreadCount, unreadMessages } = useSocket()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const schoolName = parentAuth?.user?.schoolName || parentAuth?.user?.subDomain || "School"
@@ -87,7 +89,12 @@ export default function ParentLayout() {
               item.href === ""
                 ? location.pathname === `/${slug}/parent` || location.pathname === `/${slug}/parent/`
                 : location.pathname === to
-            const showBadge = item.badge === "unread" && unreadCount > 0
+            const badgeCount = item.badge === "unreadMessages"
+                ? unreadMessages
+                : item.badge === "unread"
+                    ? unreadCount
+                    : 0
+            const showBadge = badgeCount > 0
             return (
               <Link
                 key={item.label}
@@ -102,8 +109,8 @@ export default function ParentLayout() {
                 <item.icon className="size-[18px]" />
                 <span className="flex-1">{item.label}</span>
                 {showBadge && (
-                  <span className="inline-flex size-5 items-center justify-center rounded-full bg-brand text-[0.65rem] font-semibold text-brand-foreground">
-                    {unreadCount}
+                  <span className="inline-flex min-w-5 items-center justify-center rounded-full bg-brand px-1.5 text-[0.65rem] font-semibold text-brand-foreground">
+                    {badgeCount > 9 ? "9+" : badgeCount}
                   </span>
                 )}
               </Link>
@@ -138,7 +145,7 @@ export default function ParentLayout() {
               onClick={() => setSidebarOpen(true)}
               className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
             >
-              <MenuIcon className="size-5" />
+              <PanelLeftIcon className="size-5" />
             </button>
             <span className="hidden text-sm font-semibold tracking-tight text-brand items-center gap-2 sm:flex">
               <Zhipu className="size-5" />

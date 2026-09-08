@@ -1,7 +1,7 @@
 import { Outlet, Link, useLocation } from "react-router-dom"
 import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { useState } from "react"
-import { MenuIcon, XIcon, LayoutDashboardIcon, SchoolIcon, UsersIcon, SettingsIcon, LogOutIcon } from "lucide-react"
+import { XIcon, LayoutDashboardIcon, SchoolIcon, UsersIcon, SettingsIcon, LogOutIcon, PanelLeftIcon } from "lucide-react"
 import { useDispatch } from "react-redux"
 import { logout } from "@/store/superadmin/index"
 import { useNavigate } from "react-router-dom"
@@ -100,7 +100,7 @@ export default function AdminLayout() {
             onClick={() => setSidebarOpen(true)}
             className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
           >
-            <MenuIcon className="size-5" />
+              <PanelLeftIcon className="size-5" />
           </button>
           <span className="text-sm font-semibold tracking-tight text-brand flex items-center gap-2">
             <Zhipu className="size-5" />

@@ -3,7 +3,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { CycleProvider } from "@/components/common/cycle-provider"
 import { useState } from "react"
 import {
-  MenuIcon,
+  PanelLeftIcon,
   XIcon,
   LayoutDashboardIcon,
   UsersIcon,
@@ -17,6 +17,9 @@ import {
   BarChart3Icon,
   BellIcon,
   MessageSquareIcon,
+  CreditCardIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
 } from "lucide-react"
 import { toast } from "sonner"
 import { Zhipu } from '@thesvg/react'
@@ -48,6 +51,12 @@ const navGroups = [
     ],
   },
   {
+    label: "Finance",
+    items: [
+      { icon: CreditCardIcon, label: "Fees & Payments", href: "/fees" },
+    ],
+  },
+  {
     label: "Insights",
     items: [
       { icon: BarChart3Icon, label: "Analytics", href: "/analytics" },
@@ -61,6 +70,11 @@ export default function SchoolAdminLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [expandedGroups, setExpandedGroups] = useState({})
+
+  const toggleGroup = (label) => {
+    setExpandedGroups((prev) => ({ ...prev, [label]: !prev[label] }))
+  }
 
   const auth = (() => {
     try {
@@ -124,39 +138,50 @@ export default function SchoolAdminLayout() {
             </button>
           </div>
 
-          <nav className="flex-1 space-y-7 overflow-y-auto px-4 py-4">
-            {navGroups.map((group) => (
-              <div key={group.label}>
-                <p className="px-3 pb-2 text-[0.65rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground/70">
-                  {group.label}
-                </p>
-                <div className="space-y-1">
-                  {group.items.map((item) => {
-                    const to = `/${slug}/admin${item.href}`
-                    const isActive = location.pathname === to
-                    return (
-                      <Link
-                        key={item.label}
-                        to={to}
-                        onClick={() => setSidebarOpen(false)}
-                        className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
-                          isActive
-                            ? "bg-brand/10 text-brand brand-ring dark:bg-brand/15"
-                            : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
-                        }`}
-                      >
-                        <item.icon
-                          className={`size-[18px] transition-transform duration-200 group-hover:scale-105 ${
-                            isActive ? "text-brand" : ""
-                          }`}
-                        />
-                        {item.label}
-                      </Link>
-                    )
-                  })}
+          <nav className="flex-1 space-y-2 overflow-y-auto px-4 py-4">
+            {navGroups.map((group) => {
+              const isExpanded = expandedGroups[group.label] !== false
+              const ChevronIcon = isExpanded ? ChevronDownIcon : ChevronRightIcon
+              return (
+                <div key={group.label}>
+                  <button
+                    type="button"
+                    onClick={() => toggleGroup(group.label)}
+                    className="flex w-full items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                  >
+                    <ChevronIcon className="size-3 shrink-0" />
+                    {group.label}
+                  </button>
+                  {isExpanded && (
+                    <div className="space-y-1 pl-2">
+                      {group.items.map((item) => {
+                        const to = `/${slug}/admin${item.href}`
+                        const isActive = location.pathname === to
+                        return (
+                          <Link
+                            key={item.label}
+                            to={to}
+                            onClick={() => setSidebarOpen(false)}
+                            className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+                              isActive
+                                ? "bg-brand/10 text-brand brand-ring dark:bg-brand/15"
+                                : "text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
+                            }`}
+                          >
+                            <item.icon
+                              className={`size-[18px] transition-transform duration-200 group-hover:scale-105 ${
+                                isActive ? "text-brand" : ""
+                              }`}
+                            />
+                            {item.label}
+                          </Link>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </nav>
 
           <div className="space-y-3 border-t border-sidebar-border p-4">
@@ -185,20 +210,22 @@ export default function SchoolAdminLayout() {
       </aside>
 
       <div className="flex flex-1 flex-col overflow-hidden">
-        <header className="flex items-center justify-between border-b border-border px-5 py-4 lg:px-10 lg:py-5">
-          <div className="flex items-center gap-3">
+        <header className="grid grid-cols-[auto_1fr_auto] items-center border-b border-border px-5 py-4 lg:px-10 lg:py-5 gap-3">
+          <div className="flex items-center">
             <button
               onClick={() => setSidebarOpen(true)}
               className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
             >
-              <MenuIcon className="size-5" />
+                  <PanelLeftIcon className="size-5" />
             </button>
-            <span className="hidden text-sm font-semibold tracking-tight text-brand items-center gap-2 sm:flex">
-              <Zhipu className="size-5" />
-              Craftie
+          </div>
+          <div className="flex items-center justify-center">
+            <span className="text-base font-semibold tracking-tight text-brand items-center gap-2 flex whitespace-nowrap">
+              <Zhipu className="size-6" />
+              Skole
             </span>
           </div>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="flex items-center justify-end gap-2">
             <NotificationDropdown />
             <ThemeToggle />
           </div>

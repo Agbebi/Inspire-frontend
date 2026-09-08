@@ -54,6 +54,18 @@ export const deleteStudent = createAsyncThunk(
     }
 );
 
+export const updateStudentVisibility = createAsyncThunk(
+    'student/updateStudentVisibility',
+    async ({ id, resultVisibility }, { rejectWithValue }) => {
+        try {
+            const response = await API.patch(`/api/school/manage/students/${id}/visibility`, { resultVisibility });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to update visibility');
+        }
+    }
+);
+
 export const promoteStudents = createAsyncThunk(
     'student/promoteStudents',
     async (data, { rejectWithValue }) => {
@@ -104,6 +116,14 @@ const studentSlice = createSlice({
             .addCase(updateStudent.rejected, (state, action) => { state.loading = false; state.success = false; state.error = action.payload; })
 
             .addCase(deleteStudent.fulfilled, (state, action) => { state.items = state.items.filter((i) => i._id !== action.payload.id); })
+
+            .addCase(updateStudentVisibility.fulfilled, (state, action) => {
+                const updated = action.payload.data
+                state.items = state.items.map((i) => i._id === updated._id ? { ...i, resultVisibility: updated.resultVisibility } : i)
+                state.success = true
+            })
+            .addCase(updateStudentVisibility.rejected, (state, action) => { state.error = action.payload; })
+
             .addCase(promoteStudents.fulfilled, (state) => {
                 state.loading = false;
                 state.success = true;

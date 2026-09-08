@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { toast } from "sonner"
-import { PlusIcon, PencilIcon, TrashIcon, BookUserIcon, EyeIcon } from "lucide-react"
+import { PlusIcon, PencilIcon, TrashIcon, BookUserIcon, EyeIcon, EyeOffIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -29,6 +29,7 @@ export default function Teachers() {
     const [modalOpen, setModalOpen] = useState(false)
     const [editingId, setEditingId] = useState(null)
     const [formData, setFormData] = useState({ ...emptyForm })
+    const [showPassword, setShowPassword] = useState(false)
     const [assignments, setAssignments] = useState([])
 
     const [viewOpen, setViewOpen] = useState(false)
@@ -218,7 +219,21 @@ export default function Teachers() {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="password">Password {editingId && "(leave blank to keep)"}</Label>
-                        <Input id="password" type="password" required={!editingId} autoComplete="new-password" value={formData.password} onChange={(e) => setFormData((p) => ({ ...p, password: e.target.value }))} placeholder="••••••••" />
+                        <div className="relative">
+                            <Input id="password" type={showPassword ? "text" : "password"} required={!editingId} autoComplete="new-password" value={formData.password} onChange={(e) => setFormData((p) => ({ ...p, password: e.target.value }))} placeholder="••••••••" className="h-10 pr-10" />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                aria-label={showPassword ? "Hide password" : "Show password"}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            >
+                                {showPassword ? (
+                                    <EyeOffIcon className="size-4" />
+                                ) : (
+                                    <EyeIcon className="size-4" />
+                                )}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="space-y-2">

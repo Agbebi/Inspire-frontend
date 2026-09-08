@@ -3,7 +3,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle"
 import { CycleProvider } from "@/components/common/cycle-provider"
 import { useState, useEffect } from "react"
 import {
-  MenuIcon,
+  PanelLeftIcon,
   XIcon,
   LayoutDashboardIcon,
   BookOpenIcon,
@@ -183,7 +183,7 @@ export default function TeacherLayout() {
                 onClick={() => setSidebarOpen(true)}
                 className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted lg:hidden"
               >
-                <MenuIcon className="size-5" />
+                      <PanelLeftIcon className="size-5" />
               </button>
               <span className="hidden text-sm font-semibold tracking-tight text-brand items-center gap-2 sm:flex">
                 <Zhipu className="size-5" />

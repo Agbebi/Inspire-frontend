@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate, useParams, Link } from "react-router-dom"
-import { GraduationCapIcon, ArrowLeftIcon } from "lucide-react"
+import { GraduationCapIcon, ArrowLeftIcon, EyeIcon, EyeOffIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,6 +15,7 @@ export default function StudentLogin() {
     const [step, setStep] = useState(1)
     const [admissionNumber, setAdmissionNumber] = useState("")
     const [accessPin, setAccessPin] = useState("")
+    const [showPin, setShowPin] = useState(false)
     const [loading, setLoading] = useState(false)
 
     async function handleAdmissionSubmit(e) {
@@ -94,17 +95,32 @@ export default function StudentLogin() {
                     <form onSubmit={handlePinSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="accessPin">Access PIN</Label>
-                            <Input
-                                id="accessPin"
-                                type="password"
-                                value={accessPin}
-                                onChange={(e) => setAccessPin(e.target.value)}
-                                placeholder="Enter your 6-digit PIN"
-                                maxLength={6}
-                                inputMode="numeric"
-                                pattern="[0-9]*"
-                                autoFocus
-                            />
+                            <div className="relative">
+                                <Input
+                                    id="accessPin"
+                                    type={showPin ? "text" : "password"}
+                                    value={accessPin}
+                                    onChange={(e) => setAccessPin(e.target.value)}
+                                    placeholder="Enter your 6-digit PIN"
+                                    maxLength={6}
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
+                                    autoFocus
+                                    className="h-10 pr-10"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPin((prev) => !prev)}
+                                    aria-label={showPin ? "Hide PIN" : "Show PIN"}
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                >
+                                    {showPin ? (
+                                        <EyeOffIcon className="size-4" />
+                                    ) : (
+                                        <EyeIcon className="size-4" />
+                                    )}
+                                </button>
+                            </div>
                             <p className="text-xs text-muted-foreground">
                                 Admission number: {admissionNumber}
                             </p>

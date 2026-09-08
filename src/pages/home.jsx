@@ -84,10 +84,10 @@ export default function HomePage() {
           <div className="mx-auto max-w-3xl text-center space-y-4">
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
               Empowering schools with{" "}
-              <span className="text-brand">effortless</span> result management
+              <span className="text-brand">effortless</span> academic management
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              The all-in-one platform for schools to manage results, track performance, and publish report cards with clarity and confidence.
+              Skole App helps schools manage results, track performance, and publish report cards with clarity and confidence.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
               <Button size="lg" variant="outline" className="gap-2" asChild>

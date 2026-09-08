@@ -1,7 +1,7 @@
 {
   "name": "Craftie",
   "short_name": "Craftie",
-  "description": "A Result Management System for schools",
+  "description": "Skole App - School management platform",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",

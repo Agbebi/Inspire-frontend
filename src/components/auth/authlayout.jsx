@@ -29,7 +29,7 @@ const features = [
 
 export default function AuthLayout({
   brandName = "Craftie",
-  tagline = "The all-in-one platform for effortless school result management.",
+  tagline = "The all-in-one platform for effortless school management.",
 }) {
   return (
     <div className="h-svh p-2">
@@ -52,10 +52,10 @@ export default function AuthLayout({
 
           <div className="max-w-md">
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-gray-400">
-              School result management
+              School management platform
             </p>
             <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-balance text-white">
-              Empowering schools with effortless result management
+              Empowering schools with effortless management
             </h1>
             <p className="mt-3 text-sm leading-relaxed text-gray-400">
               {tagline}
