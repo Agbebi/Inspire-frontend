@@ -104,7 +104,7 @@ export default function AdminLayout() {
           </button>
           <span className="text-sm font-semibold tracking-tight text-brand flex items-center gap-2">
             <Zhipu className="size-5" />
-            Craftie
+            Kito Edu
           </span>
           <div className="ml-auto flex items-center gap-2">
             <ThemeToggle />

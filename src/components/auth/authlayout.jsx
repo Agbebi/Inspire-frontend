@@ -28,7 +28,7 @@ const features = [
 ]
 
 export default function AuthLayout({
-  brandName = "Craftie",
+  brandName = "Kito Edu",
   tagline = "The all-in-one platform for effortless school management.",
 }) {
   return (

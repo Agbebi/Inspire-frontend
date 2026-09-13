@@ -222,7 +222,7 @@ export default function SchoolAdminLayout() {
           <div className="flex items-center justify-center">
             <span className="text-base font-semibold tracking-tight text-brand items-center gap-2 flex whitespace-nowrap">
               <Zhipu className="size-6" />
-              Skole
+              Kito Edu
             </span>
           </div>
           <div className="flex items-center justify-end gap-2">

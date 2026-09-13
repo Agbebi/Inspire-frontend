@@ -25,10 +25,10 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet";
 import { toast } from "sonner";
-import { formatNaira, toMinorUnit } from "@/lib/utils"
+import { formatNaira, toMinorUnit } from "@/lib/utils";
 
 function formatCurrency(amountInKobo) {
-  return formatNaira(amountInKobo)
+  return formatNaira(amountInKobo);
 }
 
 function StatusBadge({ status }) {
@@ -320,7 +320,7 @@ export default function SchoolAdminFees() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center flex-col sm:flex-row justify-between">
         <div className="space-y-1">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
             Finance
@@ -333,7 +333,7 @@ export default function SchoolAdminFees() {
             bank via Paystack subaccounts.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-center gap-2">
           <Button onClick={() => setShowForm(true)} className="gap-2">
             <PlusIcon className="size-4" /> <span>Create New Fee</span>
           </Button>

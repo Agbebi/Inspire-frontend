@@ -149,7 +149,7 @@ export default function ParentLayout() {
             </button>
             <span className="hidden text-sm font-semibold tracking-tight text-brand items-center gap-2 sm:flex">
               <Zhipu className="size-5" />
-              Craftie
+              Kito Edu
             </span>
           </div>
           <div className="ml-auto flex items-center gap-2">

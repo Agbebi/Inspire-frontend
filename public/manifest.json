@@ -1,7 +1,7 @@
 {
-  "name": "Craftie",
-  "short_name": "Craftie",
-  "description": "Skole App - School management platform",
+  "name": "Kito Edu",
+  "short_name": "Kito Edu",
+  "description": "Kito Edu - School management platform",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait-primary",

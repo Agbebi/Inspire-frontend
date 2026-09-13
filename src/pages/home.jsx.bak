@@ -1,18 +1,11 @@
-import { Link } from "react-router-dom";
-import {
-  GraduationCapIcon,
-  BarChart3Icon,
-  UsersIcon,
-  ShieldCheckIcon,
-  SearchIcon,
-  GraduationCapIcon as StudentIcon,
-  LayoutDashboardIcon as AdminIcon,
-  BookOpenIcon as TeacherIcon,
-} from "lucide-react";
-import { Zhipu } from "@thesvg/react";
+import { Link } from "react-router-dom"
+import { GraduationCapIcon, BarChart3Icon, UsersIcon, ShieldCheckIcon, SearchIcon, GraduationCapIcon as StudentIcon, LayoutDashboardIcon as AdminIcon, BookOpenIcon as TeacherIcon } from "lucide-react"
+import { Zhipu } from '@thesvg/react'
+import { gsap } from "gsap"
+import { useEffect, useRef } from "react"
 
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Button } from "@/components/ui/button"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
 
 const features = [
   {
@@ -35,7 +28,7 @@ const features = [
     title: "Centralized result processing",
     description: "Create sessions, terms and classes in one place.",
   },
-];
+]
 
 const portals = [
   {
@@ -73,12 +66,26 @@ const portals = [
     href: "/auth/superadmin/login",
     variant: "outline",
   },
-];
+]
 
 export default function HomePage() {
+  const headerRef = useRef(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from(headerRef.current, {
+        y: -20,
+        opacity: 0,
+        duration: 0.6,
+        ease: "power2.out",
+      })
+    }, headerRef)
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <div className="flex min-h-svh flex-col">
-      <header className="flex items-center justify-between px-4 py-3 lg:px-6">
+    <div className="flex flex-col min-h-svh">
+      <header ref={headerRef} className="flex items-center justify-between px-4 py-3 lg:px-6">
         <div className="flex items-center gap-2">
           <Zhipu className="size-5 text-brand" />
           <span className="text-sm font-semibold tracking-tight text-brand">
@@ -90,21 +97,17 @@ export default function HomePage() {
 
       <main className="flex-1">
         <section className="space-y-6 px-4 py-12 lg:px-6 lg:py-20">
-          <div className="mx-auto max-w-3xl space-y-4 text-center">
+          <div className="mx-auto max-w-3xl text-center space-y-4">
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
               Empowering schools with{" "}
               <span className="text-brand">effortless</span> academic management
             </h1>
-            <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
-              Kito Edu helps schools manage results, track performance, and
-              publish report cards with clarity and confidence.
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Kito Edu helps schools manage results, track performance, and publish report cards with clarity and confidence.
             </p>
-            <div className="flex flex-col items-center justify-center gap-3 pt-4 sm:flex-row">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
               <Button size="lg" variant="outline" className="gap-2" asChild>
-                <Link
-                  className="flex flex-row items-center gap-2"
-                  to="/auth/school/find"
-                >
+                <Link className="flex items-center flex-row gap-2" to="/auth/school/find">
                   <SearchIcon className="size-4" />
                   <span>Find Your School</span>
                 </Link>
@@ -126,7 +129,7 @@ export default function HomePage() {
                   </div>
                   <div className="mt-4 space-y-1">
                     <p className="text-sm font-medium">{feature.title}</p>
-                    <p className="text-xs leading-relaxed text-muted-foreground">
+                    <p className="text-xs text-muted-foreground leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -139,10 +142,8 @@ export default function HomePage() {
         <section className="px-4 pb-16 lg:px-6">
           <div className="mx-auto max-w-5xl space-y-4">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold tracking-tight">
-                Access Your Portal
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h2 className="text-2xl font-semibold tracking-tight">Access Your Portal</h2>
+              <p className="text-sm text-muted-foreground mt-1">
                 Choose your role below to get started
               </p>
             </div>
@@ -151,14 +152,14 @@ export default function HomePage() {
                 <Link
                   key={portal.title}
                   to={portal.href}
-                  className="group rounded-xl border border-border bg-card p-5 transition-colors hover:bg-muted/50"
+                  className="rounded-xl border border-border bg-card p-5 transition-colors hover:bg-muted/50 group"
                 >
-                  <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground transition-colors group-hover:text-brand">
+                  <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground group-hover:text-brand transition-colors">
                     <portal.icon className="size-5" />
                   </div>
                   <div className="mt-4 space-y-1">
                     <p className="text-sm font-medium">{portal.title}</p>
-                    <p className="text-xs leading-relaxed text-muted-foreground">
+                    <p className="text-xs text-muted-foreground leading-relaxed">
                       {portal.description}
                     </p>
                   </div>
@@ -170,11 +171,11 @@ export default function HomePage() {
       </main>
 
       <footer className="border-t border-border px-4 py-6 lg:px-6">
-        <div className="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 text-xs text-muted-foreground sm:flex-row">
+        <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} Kito Edu. All rights reserved.</p>
           <p>Built for schools that value clarity and confidence.</p>
         </div>
       </footer>
     </div>
-  );
+  )
 }

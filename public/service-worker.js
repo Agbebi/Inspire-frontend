@@ -1,4 +1,4 @@
-const CACHE_NAME = 'craftie-rms-cache-v1';
+const CACHE_NAME = 'kito-edu-rms-cache-v1';
 const urlsToCache = [
     '/',
     '/index.html',
