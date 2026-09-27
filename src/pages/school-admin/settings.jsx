@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react"
 import { toast } from "sonner"
-import { SchoolIcon, ClipboardCheckIcon, CreditCardIcon, CheckCircle, XCircle, Loader2Icon, LockKeyhole, EyeIcon, EyeOffIcon } from "lucide-react"
+import { SchoolIcon, ClipboardCheckIcon, CreditCardIcon, CheckCircle, XCircle, Loader2Icon, LockKeyhole, EyeIcon, EyeOffIcon, UploadIcon, ImageIcon, XIcon } from "lucide-react"
 
 import API from "@/api/axios"
+import schoolAdminAPI from "@/api/schoolAdmin"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -20,7 +21,7 @@ export default function Settings() {
     const [lastVerifiedKey, setLastVerifiedKey] = useState("")
     const [banksLoading, setBanksLoading] = useState(false)
     const [accountVerifying, setAccountVerifying] = useState(false)
-    const [verifyStatus, setVerifyStatus] = useState("idle") // 'idle' | 'verifying' | 'verified' | 'error'
+    const [verifyStatus, setVerifyStatus] = useState("idle")
     const [verifyError, setVerifyError] = useState("")
     const [payoutSaving, setPayoutSaving] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -28,6 +29,10 @@ export default function Settings() {
     const [passwordSaving, setPasswordSaving] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [passwordForm, setPasswordForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" })
+    const [logoPreview, setLogoPreview] = useState(null)
+    const [logoUploading, setLogoUploading] = useState(false)
+    const [logoError, setLogoError] = useState("")
+    const logoFileRef = useRef(null)
     const verifySeq = useRef(0)
 
     useEffect(() => {
@@ -44,6 +49,9 @@ export default function Settings() {
                     supportEmail: data.supportEmail || "",
                     motto: data.motto || "",
                 })
+                if (data.logoUrl) {
+                    setLogoPreview(data.logoUrl)
+                }
                 const count = data.caConfig?.caCount || 3
                 setCaCount(count)
                 setCaMaxScores(data.caConfig?.caMaxScores || (count === 2 ? [15, 15] : [10, 10, 20]))
@@ -81,6 +89,45 @@ export default function Settings() {
         const next = [...caMaxScores]
         next[index] = value === "" ? 0 : Number(value)
         setCaMaxScores(next)
+    }
+
+    async function handleLogoUpload(file) {
+        const allowedTypes = ["image/png", "image/svg+xml"]
+        if (!allowedTypes.includes(file.type)) {
+            setLogoError("Only PNG and SVG files are allowed")
+            return
+        }
+        if (file.size > 5 * 1024 * 1024) {
+            setLogoError("File size must be less than 5MB")
+            return
+        }
+        setLogoUploading(true)
+        setLogoError("")
+        try {
+            const res = await schoolAdminAPI.uploadLogo(file)
+            const url = res.data?.data?.logoUrl
+            setFormData((p) => ({ ...p, logoUrl: url }))
+            setLogoPreview(url)
+            toast.success("Logo uploaded successfully")
+        } catch (err) {
+            setLogoError(err.response?.data?.message || "Failed to upload logo")
+            toast.error(err.response?.data?.message || "Failed to upload logo")
+        } finally {
+            setLogoUploading(false)
+        }
+    }
+
+    function handleLogoRemove() {
+        setFormData((p) => ({ ...p, logoUrl: "" }))
+        setLogoPreview(null)
+        setLogoError("")
+    }
+
+    function handleFileChange(e) {
+        const file = e.target.files?.[0]
+        if (file) {
+            handleLogoUpload(file)
+        }
     }
 
     async function runVerify({ bankCode, accountNumber }, seq) {
@@ -267,8 +314,58 @@ export default function Settings() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="logoUrl">Logo URL</Label>
-                            <Input id="logoUrl" type="url" value={formData.logoUrl} onChange={(e) => setFormData((p) => ({ ...p, logoUrl: e.target.value }))} />
+                            <Label>School Logo</Label>
+                            <div className="flex items-center gap-4">
+                                {logoPreview ? (
+                                    <div className="relative">
+                                        <img
+                                            src={logoPreview}
+                                            alt="School logo"
+                                            className="size-16 rounded-xl border border-border object-contain bg-background"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={handleLogoRemove}
+                                            className="absolute -top-1.5 -right-1.5 flex size-5 items-center justify-center rounded-full bg-destructive text-white hover:bg-destructive/80"
+                                        >
+                                            <XIcon className="size-3" />
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="flex size-16 items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 text-muted-foreground">
+                                        <ImageIcon className="size-6" />
+                                    </div>
+                                )}
+                                <div className="flex flex-col gap-2">
+                                    <input
+                                        ref={logoFileRef}
+                                        id="logoUpload"
+                                        type="file"
+                                        accept="image/png,image/svg+xml"
+                                        onChange={handleFileChange}
+                                        className="hidden"
+                                    />
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={() => logoFileRef.current?.click()}
+                                        disabled={logoUploading}
+                                        className="gap-2"
+                                    >
+                                        {logoUploading ? (
+                                            <>
+                                                <Loader2Icon className="size-4 animate-spin" /> Uploading…
+                                            </>
+                                        ) : (
+                                            <>
+                                                <UploadIcon className="size-4" /> Upload Logo
+                                            </>
+                                        )}
+                                    </Button>
+                                    <p className="text-xs text-muted-foreground">PNG or SVG, max 5MB</p>
+                                    {logoError && <p className="text-xs text-destructive">{logoError}</p>}
+                                </div>
+                            </div>
                         </div>
 
                         <div className="space-y-2">

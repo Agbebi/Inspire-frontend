@@ -320,8 +320,8 @@ export default function SchoolAdminFees() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center flex-col sm:flex-row justify-between">
-        <div className="space-y-1">
+      <div className="flex items-center gap-3 items-center flex-col sm:flex-row justify-between">
+        <div className="space-y-1 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
             Finance
           </p>

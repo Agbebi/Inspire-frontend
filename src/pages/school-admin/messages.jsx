@@ -108,7 +108,7 @@ export default function SchoolAdminMessages() {
   return (
     <div className="mx-auto max-w-5xl space-y-8">
       <header className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <div className="space-y-2">
+        <div className="space-y-2 text-center sm:text-left">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand">
             Communication
           </p>
